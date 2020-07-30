@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, Prop, State } from '@stencil/core';
-import fhirpath from "../../assets/fhirpath.min.js";
+import {fhirpath} from "../../util/fhirpath.min.js";
 import uniqueId from "lodash";
 
 @Component({
@@ -370,7 +370,7 @@ export class GeneticVariants implements ComponentInterface {
   }
 
   /* Lifecycle Methods */
-  componentWillLoad() {
+  async componentWillLoad() {
     this.showId = !this.hideId;
     this.initializeComponents();
     this.parseGeneticObservations();

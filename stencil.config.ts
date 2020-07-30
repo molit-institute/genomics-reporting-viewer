@@ -16,5 +16,10 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null // disable service workers
     }
-  ]
+  ],
+  // testing: {
+  //   transformIgnorePatterns: [
+  //     "src/util/(?!(fhirpath.min.js))"
+  //   ]
+  // }
 };
