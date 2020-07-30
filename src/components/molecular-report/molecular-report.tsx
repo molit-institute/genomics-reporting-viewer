@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch } from '@stencil/core';
 import { fetchResources } from "@molit/fhir-api"; 
-import fhirpath from "../../assets/fhirpath.min.js"; 
+import {fhirpath} from "../../util/fhirpath.min.js";
+
 
 @Component({
   tag: 'molecular-report',

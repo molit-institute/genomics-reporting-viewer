@@ -18,15 +18,22 @@
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
+    "test-e2e": "stencil test --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/core": "^1.12.2"
+    "@stencil/core": "^1.12.2",
+    "@types/jest": "24.9.1",
+    "@types/puppeteer": "2.0.1",
+    "jest": "24.9.0",
+    "jest-cli": "24.9.0",
+    "puppeteer": "2.1.1"
   },
   "license": "Apache-2.0",
   "dependencies": {
     "@molit/fhir-api": "^1.0.22",
+    "fhirpath": "^2.3.0",
     "lodash": "^4.17.15"
   }
 }
