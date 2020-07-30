@@ -25,6 +25,37 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    # Caches Node.js modules 
+    - name: Cache Node.js modules
+      uses: actions/cache@v2
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: ~/.npm 
+        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-
+          ${{ runner.OS }}-
+    #tasks to create build
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run test-e2e
+      env:
+        CI: true
+  #publish:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #  - uses: actions/checkout@v2
+    # Setup .npmrc file to publish to npm
+  #  - uses: actions/setup-node@v1
+  #    with:
+  #      node-version: '12.x'
+  #      registry-url: 'https://registry.npmjs.org' 
+  #      scope: @molit
+  #  - run: npm install
+  #  - run: npm publish
+  #    env:
+  #      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  
+  # TODO Add publish as a new job??? How to only publish if test are true?
+  # Correct registry? Scope needed?
+  # NPM_TOKEN?
