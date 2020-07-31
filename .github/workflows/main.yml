@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Trial CI
+name: Test and publish
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -26,7 +24,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         registry-url: 'https://registry.npmjs.org' 
-        scope: @molit
+        #scope: @molit
     # Caches Node.js modules 
     - name: Cache Node.js modules
       uses: actions/cache@v2
@@ -49,7 +47,3 @@ jobs:
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  
-  # TODO 
-  # Correct registry? Scope needed?
-  # NPM_TOKEN?
