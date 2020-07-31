@@ -43,7 +43,8 @@ jobs:
     #publish if all previous steps run through
     - name: publish
       if: ${{ success() }}
-      run: echo "Deploying to npm ..."
-      run: npm publish
+      run: |
+        echo "Deploying to npm ..."
+        npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
