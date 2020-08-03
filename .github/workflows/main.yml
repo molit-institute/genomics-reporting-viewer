@@ -19,6 +19,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+      # Setup .npmrc file to publish to npm
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -45,7 +46,7 @@ jobs:
       if: ${{ success() }}
       run: |
         echo "Deploying to npm ..."
-        npm publish
+        npm publish --access public
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
