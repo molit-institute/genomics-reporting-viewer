@@ -1,14 +1,14 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { MolecularReport } from './molecular-report';
+import { GenomicsReport } from './genomics-report';
 
-describe('molecular-report', () => {
+describe('genomics-report', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [MolecularReport],
-      html: `<molecular-report fhir-base-url="https://fhir.molit.eu/fhir" id-molecular-report="364"></molecular-report>`,
+      components: [GenomicsReport],
+      html: `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364"></genomics-report>`,
     });
     expect(page.root).toEqualHtml(`
-    <molecular-report fhir-base-url="https://fhir.molit.eu/fhir" id-molecular-report="364">
+    <genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364">
        <div>
          <h5>
            Report
@@ -57,7 +57,7 @@ describe('molecular-report', () => {
            <genetic-variants gvtitle="SVs" tablebackground="#ecf0f1" tableheaderbackground="#ecf0f1" type="sv"></genetic-variants>
          </div>
        </div>
-      </molecular-report>
+      </genomics-report>
     `);
   });
 });
