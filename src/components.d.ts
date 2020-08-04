@@ -40,7 +40,7 @@ export namespace Components {
          */
         "type": string;
     }
-    interface MolecularReport {
+    interface GenomicsReport {
         /**
           * TODO Funtionalty to be added
          */
@@ -52,7 +52,7 @@ export namespace Components {
         /**
           * ID of the to be requested resource
          */
-        "idMolecularReport": string;
+        "idGenomicsReport": string;
         /**
           * Defines colour of the background of *genetic-variants*-table
          */
@@ -82,15 +82,15 @@ declare global {
         prototype: HTMLGeneticVariantsElement;
         new (): HTMLGeneticVariantsElement;
     };
-    interface HTMLMolecularReportElement extends Components.MolecularReport, HTMLStencilElement {
+    interface HTMLGenomicsReportElement extends Components.GenomicsReport, HTMLStencilElement {
     }
-    var HTMLMolecularReportElement: {
-        prototype: HTMLMolecularReportElement;
-        new (): HTMLMolecularReportElement;
+    var HTMLGenomicsReportElement: {
+        prototype: HTMLGenomicsReportElement;
+        new (): HTMLGenomicsReportElement;
     };
     interface HTMLElementTagNameMap {
         "genetic-variants": HTMLGeneticVariantsElement;
-        "molecular-report": HTMLMolecularReportElement;
+        "genomics-report": HTMLGenomicsReportElement;
     }
 }
 declare namespace LocalJSX {
@@ -128,7 +128,7 @@ declare namespace LocalJSX {
          */
         "type"?: string;
     }
-    interface MolecularReport {
+    interface GenomicsReport {
         /**
           * TODO Funtionalty to be added
          */
@@ -140,7 +140,7 @@ declare namespace LocalJSX {
         /**
           * ID of the to be requested resource
          */
-        "idMolecularReport": string;
+        "idGenomicsReport": string;
         "onErrorOccurred"?: (event: CustomEvent<any>) => void;
         /**
           * Defines colour of the background of *genetic-variants*-table
@@ -165,7 +165,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "genetic-variants": GeneticVariants;
-        "molecular-report": MolecularReport;
+        "genomics-report": GenomicsReport;
     }
 }
 export { LocalJSX as JSX };
@@ -173,7 +173,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "genetic-variants": LocalJSX.GeneticVariants & JSXBase.HTMLAttributes<HTMLGeneticVariantsElement>;
-            "molecular-report": LocalJSX.MolecularReport & JSXBase.HTMLAttributes<HTMLMolecularReportElement>;
+            "genomics-report": LocalJSX.GenomicsReport & JSXBase.HTMLAttributes<HTMLGenomicsReportElement>;
         }
     }
 }

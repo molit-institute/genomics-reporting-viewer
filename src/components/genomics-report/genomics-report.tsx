@@ -4,12 +4,12 @@ import {fhirpath} from "../../util/fhirpath.min.js";
 
 
 @Component({
-  tag: 'molecular-report',
-  styleUrl: 'molecular-report.css',
+  tag: 'genomics-report',
+  styleUrl: 'genomics-report.css',
   shadow: false,
   scoped: true
 })
-export class MolecularReport implements ComponentInterface {
+export class GenomicsReport implements ComponentInterface {
   /**
    * Base URL to fhir-resource 
    */
@@ -17,7 +17,7 @@ export class MolecularReport implements ComponentInterface {
   /**
    * ID of the to be requested resource
    */
-  @Prop() idMolecularReport!: string; 
+  @Prop() idGenomicsReport!: string; 
   /**
    * Authentication token that will be added to the Authorization Header within all request in the fhir-server. </br>
    * ```Authorization: Bearer <token>```
@@ -84,15 +84,15 @@ export class MolecularReport implements ComponentInterface {
   validateFhirBaseUrl() {
     if (this.fhirBaseUrl == null){ throw new Error('fhir-base-url: required'); }
   }
-  @Watch('idMolecularReport')
-  validateIdMolecularReport() {
-    if (this.idMolecularReport == null){ throw new Error('id-molecular-report: required'); } 
+  @Watch('idGenomicsReport')
+  validateIdGenomicsReport() {
+    if (this.idGenomicsReport == null){ throw new Error('id-molecular-report: required'); } 
   }
 
   /* computed */
   getParams() {
     const params = new URLSearchParams();
-    params.append("_id", this.idMolecularReport);
+    params.append("_id", this.idGenomicsReport);
     params.append("_include", "DiagnosticReport:result");
     params.append("_include", "DiagnosticReport:performer");
     params.append("_include", "DiagnosticReport:specimen");
@@ -188,7 +188,7 @@ export class MolecularReport implements ComponentInterface {
   async componentWillLoad() { 
     try {
     this.validateFhirBaseUrl();
-    this.validateIdMolecularReport();     
+    this.validateIdGenomicsReport();     
     } catch (e) {
       console.error(e);
     }

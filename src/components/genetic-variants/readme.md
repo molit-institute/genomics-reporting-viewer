@@ -23,12 +23,12 @@
 
 ### Used by
 
- - [molecular-report](../molecular-report)
+ - [genomics-report](../genomics-report)
 
 ### Graph
 ```mermaid
 graph TD;
-  molecular-report --> genetic-variants
+  genomics-report --> genetic-variants
   style genetic-variants fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
