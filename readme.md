@@ -10,9 +10,9 @@ Components for displaying FHIR genomic reports complying to the [FHIR Genomics R
 ### Angular, React, Vue
 
 - Add the following to your 
-    - Angular: main.ts
-    - React: index.js
-    - Vue: main.js
+    - Angular: `main.ts`
+    - React: `index.js`
+    - Vue: `main.js`
 
 ```js
 import { applyPolyfills, defineCustomElements } from '@molit/genomics-reporting-viewer/loader';
@@ -22,7 +22,7 @@ applyPolyfills().then(() => {
     defineCustomElements();
 });
 ```
-- <i> Only in Angular:</i> In your app.module.ts add the following 
+- <i> Only in Angular:</i> In your `app.module.ts` add the following 
 
 ```js
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
@@ -37,22 +37,22 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 #### Script tag
 
-- Add the script tag `<script src="https://unpkg.com/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your index.html
+- Add the script tag `<script src="https://unpkg.com/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your `index.html`
 - Then you can use the element anywhere in your template, JSX, html etc
 
 #### Node Modules
 - Run `npm install @molit/genomics-reporting-viewer --save`
-- Add the script tag`<script src="/node_modules/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your index.html
+- Add the script tag`<script src="/node_modules/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your `index.html`
 - Then you can use the element anywhere in your template, JSX, html etc
 
-Need more information? Check out the docs [here](https://stenciljs.com/docs/overview).
+Need more information? Check out the StencilJS Framework Integration Guide [here](https://stenciljs.com/docs/overview).
 
 ## Components
 
-| Name                                                | Description                                                                                                   | Example                                                                                                     |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| [genomics-report](src/components/genomics-report)   | Displays the given FHIR genomic report. Depends on [genetic-variants](src/components/genetic-variants).       | `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>`  |
-| [genetic-variants](src/components/genetic-variants) | Displays the given genetic variant inside a table. Used by [genomics-report](src/components/genomics-report). | `<genetic-variants  genetic-observations='[...]' type="snv" gv-title="SNVs"></genetic-variants> `           |
+| Name                                                | Description                                                                                                     | Example                                                                                                     |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [genomics-report](src/components/genomics-report)   | Displays the given FHIR genomic report. </br> Depends on [genetic-variants](src/components/genetic-variants).   | `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>`  |
+| [genetic-variants](src/components/genetic-variants) | Displays the given genetic variant as a table. </br> Used by [genomics-report](src/components/genomics-report). | `<genetic-variants  genetic-observations='[...]' type="snv" gv-title="SNVs"></genetic-variants> `           |
 
 
 
