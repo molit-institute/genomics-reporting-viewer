@@ -1,6 +1,9 @@
+# Genetic Variants
+
 ## Example
 
 ### Rendered
+
 <html dir="ltr" lang="de">
   <head>
     <meta charset="utf-8">
@@ -16,6 +19,7 @@
 </html>
 
 ### Code
+
 ``` html
 	<genetic-variants genetic-observations='[{
         "resourceType":"Observation",

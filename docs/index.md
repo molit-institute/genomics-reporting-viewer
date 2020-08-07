@@ -22,5 +22,4 @@
 	<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>
 ```
 
-# Genetic Variants
 
