@@ -49,10 +49,10 @@ Need more information? Check out the [StencilJS Framework Integration Guide](htt
 
 ## Components
 
-| Name                                                | Description                                                                                                     | Example                                                                                                     |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| [genomics-report](src/components/genomics-report)   | Displays the given FHIR genomic report. </br> Depends on [genetic-variants](src/components/genetic-variants).   | `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>`  |
-| [genetic-variants](src/components/genetic-variants) | Displays the given genetic variant as a table. </br> Used by [genomics-report](src/components/genomics-report). | `<genetic-variants  genetic-observations='[...]' type="snv" gv-title="SNVs"></genetic-variants> `           |
+| Name                                                                                                                           | Description                                                                                                     | Example | Example Component |
+| ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------- | ----------------- |
+| [genomics-report](https://github.com/molit-institute/genomics-reporting-viewer/tree/gh-pages/src/components/genomics-report)   | Displays the given FHIR genomic report. </br> Depends on [genetic-variants](src/components/genetic-variants).   | `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>`  | [:link:](https://docs.molit.eu/genomics-reporting-viewer/) |
+| [genetic-variants](https://github.com/molit-institute/genomics-reporting-viewer/tree/gh-pages/src/components/genetic-variants) | Displays the given genetic variant as a table. </br> Used by [genomics-report](src/components/genomics-report). | `<genetic-variants  genetic-observations='[...]' type="snv" gv-title="SNVs"></genetic-variants> ` | [:link:](https://docs.molit.eu/genomics-reporting-viewer/genetic-variants-example) |
 
 ----------------------------------------------
 

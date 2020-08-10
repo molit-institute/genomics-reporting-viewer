@@ -19,66 +19,68 @@
 
 ### Code
 ``` html
-  <genetic-variants genetic-observations='[{
-        "resourceType":"Observation",
-        "id":"354",
-        "meta":
-      {  
-        "versionId":"1",
-        "lastUpdated":"2020-05-25T20:58:56.935+02:00",
-        "source":"#2eVInoNVLgo7AOBm",
-        "profile":["http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"]
-      },
+  <genetic-variants genetic-observations='
+    [{
+      "resourceType":"Observation",
+      "id":"354",
+      "meta":
+        {  
+          "versionId":"1",
+          "lastUpdated":"2020-05-25T20:58:56.935+02:00",
+          "source":"#2eVInoNVLgo7AOBm",
+          "profile":["http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/variant"]
+        },
         "extension":
-      [{
-              "url":"http://hl7.org/fhir/StructureDefinition/workflow-episodeOfCare",
-              "valueReference":
-          {
-          "reference":"https://fhir.molit.eu/EpisodeOfCare/123"
-        }
-            }],
+          [{
+            "url":"http://hl7.org/fhir/StructureDefinition/workflow-episodeOfCare",
+            "valueReference":
+              {
+              "reference":"https://fhir.molit.eu/EpisodeOfCare/123"
+              }
+          }],
         "basedOn":
-      [{
-        "reference":"https://fhir.molit.eu/ServiceRequest/789"
-      }],
+          [{
+            "reference":"https://fhir.molit.eu/ServiceRequest/789"
+          }],
         "status":"final",
         "category":
           [{
-        "coding":
-                  [{
-            "system":"http://terminology.hl7.org/CodeSystem/observation-category",
-                    "code":"laboratory",
-                    "display":"Laboratory"}]
-                }],
-              "code":
-            {
-                  "coding":
+            "coding":
               [{
-                        "system":"http://loinc.org",
-                        "code":"69548-6",
-                        "display":"Genetic variant assessment"
-                      }]
-                },
-              "subject":
-                {
+                "system":"http://terminology.hl7.org/CodeSystem/observation-category",
+                  "code":"laboratory",
+                  "display":"Laboratory"
+              }]
+          }],
+        "code":
+          {
+            "coding":
+              [{
+                "system":"http://loinc.org",
+                "code":"69548-6",
+                "display":"Genetic variant assessment"
+              }]
+          },
+        "subject":
+          {
             "reference":"https://fhir.molit.eu/Patient/456"},
-                  "valueCodeableConcept":
-                      {
+            "valueCodeableConcept":
+              {
                 "coding":
                   [{
-                              "system":"http://loinc.org",
-                              "code":"LA9633-4",
-                              "display":"Present"
-                          }]
+                    "system":"http://loinc.org",
+                    "code":"LA9633-4",
+                    "display":"Present"
+                  }]
               },
-                  "specimen":
-                    {
-                  "reference":"https://fhir.molit.eu/Specimen/123"
+            "specimen":
+              {
+                "reference":"https://fhir.molit.eu/Specimen/123"
               },
-                  "component":
+            "component":
               [{
-                "code":
-                          {
+               "code":
+                  {
                     "coding":
                       [{
                         "system":"http://loinc.org",
@@ -86,42 +88,40 @@
                         "display":"DNA change type"
                       }]
                   },
-                        "valueCodeableConcept":
+                "valueCodeableConcept":
                   {
-                              "coding":
+                    "coding":
                       [{
                         "system":"http://sequenceontology.org",
                         "code":"SO:0001019",
                         "display":"copy_number_variation"
                       },
-                                {
+                      {
                         "system":"http://sequenceontology.org",
                         "code":"amp",
-                        "display":"amp"
+                         "display":"amp"
                       }]
-                          }
-                      },
-                      {
+                  }
+              },{
                 "code":
-                          {
+                  {
                     "coding":
                       [{
                         "system:""http://loinc.org",
                         "code":"62374-4",
                         "display":"Human reference sequence assembly version"
                       }]
-                          },
-                        "valueCodeableConcept":
-                          {
+                  },
+                "valueCodeableConcept":
+                  {
                     "coding":
                       [{
                         "system":"http://molit.eu/fhir/vitu-tbd-codes",
                         "code":"hg19",
                         "display":"hg19"
                       }]
-                          }
-                      },
-              {
+                  }
+              },{
                 "code":
                   {
                     "coding":
@@ -140,10 +140,9 @@
                         "display":"non-focal"
                       }]
                   }
-              },
-                      {
+              },{
                 "code":
-                          {
+                  {
                     "coding":
                       [{
                         "system":"http://loinc.org",
@@ -151,32 +150,30 @@
                         "display":"Genomic structural variant copy number"
                       }]
                   },
-                        "valueQuantity":
+                "valueQuantity":
                   {
                     "value":5
                   }
-                      },
-                      {
+              },{
                 "code":
-                          {
+                  {
                     "coding":
                       [{
                         "system":"http://loinc.org",
                         "code":"48018-6",
                         "display":"Gene studied ID"
                       }]
-                          },
-                         "valueCodeableConcept":
-                   {
-                              "coding":
+                  },
+                "valueCodeableConcept":
+                  {
+                    "coding":
                       [{
                         "system":"http://www.genenames.org/geneId",
                         "code":"MUC1",
                         "display":"MUC1"
                       }]
-                          }
-                      },
-                      {
+                  }
+              },{
                 "code":
                   {
                     "coding":
@@ -195,8 +192,7 @@
                         "display":"MUC2"
                       }]
                   }
-                      },
-              {  
+              },{  
                 "code":
                   {
                     "coding":
@@ -211,8 +207,7 @@
                     "low":{"value":0},
                     "high":{"value":0}
                   }
-              },
-              {
+              },{
                 "code":
                   {
                     "coding":
@@ -231,18 +226,17 @@
                         "display":"NM_002456.5"
                       }]
                   }
-              },
-                      {
+              },{
                 "code":
                   {
-                            "coding":
+                    "coding":
                       [{
                         "system":"http://loinc.org",
                         "code":"48001-2",
                         "display":"Cytogenetic (chromosome) location"
-                                }]
+                      }]
                   },
-                         "valueCodeableConcept":
+                "valueCodeableConcept":
                   {
                     "coding":
                       [{
@@ -250,25 +244,23 @@
                         "code":"chr1",
                         "display":"chr1"
                       }]
-                          }
-                      },
-                      {
+                  }
+              },{
                 "code":
                   {
                     "coding":
                       [{
-                        system":"http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes",
+                        "system":"http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes",
                         "code":"exact-start-end",
                         "display":"Variant exact start and end"
-                                }]
-                          },
+                      }]
+                  },
                 "valueRange":
                   {
                     "low":{"value":155158300},
                     "high":{"value":155162706}
                   }
-                      },
-                      {
+              },{
                 "code":
                   {
                     "coding":
@@ -278,16 +270,16 @@
                         "display":"Genomic source class [Type]"
                       }]
                   },
-                        "valueCodeableConcept":
+                "valueCodeableConcept":
                   {
-                              "coding":
+                    "coding":
                       [{
                         "system":"http://loinc.org",
                         "code":"LA6684-0",
                         "display":"Somatic"
                       }]
-                          }
-                      }]
+                  }
+              }]
           }
       }]
   }]' 
