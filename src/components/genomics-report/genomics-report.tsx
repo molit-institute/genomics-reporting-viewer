@@ -1,6 +1,7 @@
-import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch, State, Element } from '@stencil/core';
 import { fetchResources } from "@molit/fhir-api"; 
-import {fhirpath} from "../../util/fhirpath.min.js";
+import {fhirpath} from "../../util/fhirpath/fhirpath.min.js";
+import { getLocaleComponentStrings } from "../../util/locale";
 
 
 @Component({
@@ -43,7 +44,18 @@ export class GenomicsReport implements ComponentInterface {
    * TODO Funtionalty to be added
    */
   @Prop() enableRelevantVariants: boolean = false;
-
+  /**
+   * Language property of the component. </br>
+   * Currently suported: [de, en]
+   */
+  @Prop() locale: string = "en";
+  @Watch('locale')
+  async watchLocale(newValue: string){
+    console.log(newValue)
+    this.localeString = await getLocaleComponentStrings(this.element, newValue);
+  }
+  @Element() element: HTMLElement;
+  @State() localeString: any;
   bundle: any; 
 
   params: any = this.getParams(); 
@@ -188,7 +200,8 @@ export class GenomicsReport implements ComponentInterface {
   async componentWillLoad() { 
     try {
     this.validateFhirBaseUrl();
-    this.validateIdGenomicsReport();     
+    this.validateIdGenomicsReport();
+    this.localeString = await getLocaleComponentStrings(this.element, this.locale);     
     } catch (e) {
       console.error(e);
     }
@@ -206,11 +219,11 @@ export class GenomicsReport implements ComponentInterface {
     if(this.diagnosticReport){ 
     return ([
       <div> 
-        <h5>Report</h5>
-          <div>Issued: {this.diagnosticReport.issued}</div>
-          <div>Status: {this.diagnosticReport.status}</div>
+        <h5>{this.localeString.report}</h5>
+          <div>{this.localeString.issued}: {this.diagnosticReport.issued}</div>
+          <div>{this.localeString.status}: {this.diagnosticReport.status}</div>
           <div>
-            Documents: 
+          {this.localeString.documents}:  
             {this.presentedForms.map((document, index) =>
               <a key={this.getDocumentUrl(document.url)}>
                 { index + 1 }
@@ -218,26 +231,26 @@ export class GenomicsReport implements ComponentInterface {
             )}
           </div>
             <hr />
-        <h5>Meta</h5>
-          <div>Chromosomal Instability: {this.chromosomalInstability().toString() }</div>
-          <div>Germline Pathogenicity: {this.germlinePathogenicity()}</div>
-          <div>Percentage Tumor Tissue: {this.percentTumorTissue()}</div>
-            <div>Quality: {this.qualityFlags() }</div>
-            <div>MSI: {this.msi()}</div>
-            <div>TMB: {this.tmb()}</div>
+        <h5>{this.localeString.meta}</h5>
+          <div>{this.localeString.chromosomalInstability}: {this.chromosomalInstability().toString() }</div>
+          <div>{this.localeString.germlinePathogenicity}: {this.germlinePathogenicity()}</div>
+          <div>{this.localeString.percentageTumorTissue}: {this.percentTumorTissue()}</div>
+            <div>{this.localeString.quality}: {this.qualityFlags() }</div>
+            <div>{this.localeString.msi}: {this.msi()}</div>
+            <div>{this.localeString.tmb}: {this.tmb()}</div>
             <hr />
         <div>
-          <h4>All Variants</h4>
+          <h4>{this.localeString.allVariants}</h4>
           { this.snvs && this.snvs.length ? 
-            <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} />
+            <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
           : null
           }
           {this.cnvs && this.cnvs.length ?
-            <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} />
+            <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
           : null
           }
           {this.svs && this.svs.length ? 
-            <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} />
+            <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
           : null
           }
         </div>
