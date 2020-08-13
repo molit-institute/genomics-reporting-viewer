@@ -24,6 +24,10 @@ export namespace Components {
          */
         "hideId": boolean;
         /**
+          * Language property of the component. </br> Currently suported: [de, en]
+         */
+        "locale": string;
+        /**
           * If `true`, the component will show a button to select column options.
          */
         "showColumnHideOptions": boolean;
@@ -53,6 +57,10 @@ export namespace Components {
           * ID of the to be requested resource
          */
         "idGenomicsReport": string;
+        /**
+          * Language property of the component. </br> Currently suported: [de, en]
+         */
+        "locale": string;
         /**
           * Defines colour of the background of *genetic-variants*-table
          */
@@ -112,6 +120,10 @@ declare namespace LocalJSX {
          */
         "hideId"?: boolean;
         /**
+          * Language property of the component. </br> Currently suported: [de, en]
+         */
+        "locale"?: string;
+        /**
           * If `true`, the component will show a button to select column options.
          */
         "showColumnHideOptions"?: boolean;
@@ -141,6 +153,10 @@ declare namespace LocalJSX {
           * ID of the to be requested resource
          */
         "idGenomicsReport": string;
+        /**
+          * Language property of the component. </br> Currently suported: [de, en]
+         */
+        "locale"?: string;
         "onErrorOccurred"?: (event: CustomEvent<any>) => void;
         /**
           * Defines colour of the background of *genetic-variants*-table

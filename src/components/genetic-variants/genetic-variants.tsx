@@ -1,6 +1,7 @@
-import { Component, ComponentInterface, h, Prop, State } from '@stencil/core';
-import {fhirpath} from "../../util/fhirpath.min.js";
+import { Component, ComponentInterface, h, Prop, State, Watch, Element } from '@stencil/core';
+import {fhirpath} from "../../util/fhirpath/fhirpath.min.js";
 import uniqueId from "lodash";
+import { getLocaleComponentStrings } from "../../util/locale";
 
 @Component({
   tag: 'genetic-variants',
@@ -79,7 +80,20 @@ export class GeneticVariants implements ComponentInterface {
    * Defines colour of the table-header background
    */
   @Prop() tableHeaderBackground: string = "";
+  /**
+   * Language property of the component. </br>
+   * Currently suported: [de, en]
+   */
+  @Prop() locale: string = "en";
+  @Watch('locale')
+  async watchLocale(newValue: string){
+    console.log(newValue)
+    this.localeString = await getLocaleComponentStrings(this.element, newValue);
+  }
 
+  @Element() element: HTMLElement;
+
+  @State() localeString: any;
   @State() showId: boolean = true;
   @State() filteredComponents: Array<any> = []; 
   @State() showDropdown: boolean = false; 
@@ -374,6 +388,11 @@ export class GeneticVariants implements ComponentInterface {
     this.showId = !this.hideId;
     this.initializeComponents();
     this.parseGeneticObservations();
+    try {
+      this.localeString = await getLocaleComponentStrings(this.element, this.locale);     
+      } catch (e) {
+        console.error(e);
+      }
   };
 
   render() {
@@ -382,14 +401,14 @@ export class GeneticVariants implements ComponentInterface {
         <div class="genetic-header"> 
           <h5>{ this.gvTitle }</h5>
           {this.showColumnHideOptions ? 
-            <button type="button" class="btn btn-link" onClick={() => this.toggleDropdown() }>Column selection &#9662;</button>
+            <button type="button" class="btn btn-link" onClick={() => this.toggleDropdown() }>{this.localeString.columnSelection} &#9662;</button>
            : null }
         </div>
         <div class="dropdown-wrapper"> 
           {this.showDropdown ? (          
             <div class="dropdown">
               <div class="dropdown-top">
-                <div><strong>Columns</strong></div>
+                <div><strong>{this.localeString.columns}</strong></div>
                 <div>
                   <button type="button" class="btn btn-link" onClick={() => this.toggleDropdown()}><strong>&times;</strong></button>
                 </div>
@@ -413,7 +432,7 @@ export class GeneticVariants implements ComponentInterface {
         <table class="table table-sm" style={{background: this.tableBackground }}>
           <thead>
             <tr style={{background: this.tableHeaderBackground }}>
-              {this.showId ? <th>Id </th> : null}
+              {this.showId ? <th>{this.localeString.id} </th> : null}
               {this.visibleComponents().map(component =>
               <th key={component.system + '/' + component.code}>{ component.display }</th>
               )}
