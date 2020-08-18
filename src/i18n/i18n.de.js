@@ -9,6 +9,7 @@ export default {
     "issued": "Befunddatum",
     "meta": "Meta",
     "msi": "MSI",
+    "otherObservations": "Weitere Beobachtungen",
     "percentageTumorTissue": "Anteil Tumorgewebe",
     "quality": "Qualität",
     "report": "Bericht",

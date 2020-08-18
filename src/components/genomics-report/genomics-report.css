@@ -1,1 +1,23 @@
-
+.meta-table {
+    table-layout: fixed;
+  }
+/* .form-row {
+    margin-bottom: 0.2rem;
+    label:first-child {
+      padding-right: 1rem;
+    }
+    label:nth-child(2) {
+      font-weight: 500;
+    }
+    &:hover {
+      background: #f6f8f9;
+    }
+    .col-form-label {
+      padding: 0.2rem 5px;
+    }
+  } */
+@media (min-width: 768px) {
+    .form-row label:first-child {
+        text-align: end;
+    }
+}
