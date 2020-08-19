@@ -12,7 +12,7 @@ export default {
     "otherObservations": "Other Observations",
     "percentageTumorTissue": "Percentage Tumor Tissue",
     "quality": "Quality",
-    "report": "Report",
+    "report": "Genetic Report",
     "status": "Status",
     "tmb": "TMB"
 }

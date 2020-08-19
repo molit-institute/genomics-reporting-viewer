@@ -224,7 +224,7 @@ export class GenomicsReport implements ComponentInterface {
     if(this.diagnosticReport){ 
     return ([
       <div> 
-        <h4>Genetic Report</h4>
+        <h4>{this.localeString.report}</h4>
         {!this.metaAsTable ? 
           <div>
             <h5>{this.localeString.meta}</h5>
