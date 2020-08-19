@@ -62,6 +62,10 @@ export namespace Components {
          */
         "locale": string;
         /**
+          * If `true`, the component will show meta informations as a table.
+         */
+        "metaAsTable": boolean;
+        /**
           * Defines colour of the background of *genetic-variants*-table
          */
         "tableBackground": string;
@@ -157,6 +161,10 @@ declare namespace LocalJSX {
           * Language property of the component. </br> Currently suported: [de, en]
          */
         "locale"?: string;
+        /**
+          * If `true`, the component will show meta informations as a table.
+         */
+        "metaAsTable"?: boolean;
         "onErrorOccurred"?: (event: CustomEvent<any>) => void;
         /**
           * Defines colour of the background of *genetic-variants*-table

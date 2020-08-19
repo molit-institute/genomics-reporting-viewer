@@ -9,9 +9,10 @@ export default {
     "issued": "Issued",
     "meta": "Meta",
     "msi": "MSI",
+    "otherObservations": "Other Observations",
     "percentageTumorTissue": "Percentage Tumor Tissue",
     "quality": "Quality",
-    "report": "Report",
+    "report": "Genetic Report",
     "status": "Status",
     "tmb": "TMB"
 }

@@ -11,14 +11,27 @@ import { getLocaleComponentStrings } from "../../util/locale";
   scoped: true
 })
 export class GenomicsReport implements ComponentInterface {
+
+  @Element() element: HTMLElement;
+
+  @State() localeString: any;
+  
   /**
    * Base URL to fhir-resource 
    */
   @Prop() fhirBaseUrl!: string;
+  @Watch('fhirBaseUrl')
+  validateFhirBaseUrl() {
+    if (this.fhirBaseUrl == null){ throw new Error('fhir-base-url: required'); }
+  }
   /**
    * ID of the to be requested resource
    */
-  @Prop() idGenomicsReport!: string; 
+  @Prop() idGenomicsReport!: string;
+  @Watch('idGenomicsReport')
+  validateIdGenomicsReport() {
+    if (this.idGenomicsReport == null){ throw new Error('id-molecular-report: required'); } 
+  } 
   /**
    * Authentication token that will be added to the Authorization Header within all request in the fhir-server. </br>
    * ```Authorization: Bearer <token>```
@@ -54,10 +67,12 @@ export class GenomicsReport implements ComponentInterface {
     console.log(newValue)
     this.localeString = await getLocaleComponentStrings(this.element, newValue);
   }
-  @Element() element: HTMLElement;
-  @State() localeString: any;
+  /**
+   * If `true`, the component will show meta informations as a table. 
+   */
+  @Prop() metaAsTable: boolean = false;
+  
   bundle: any; 
-
   params: any = this.getParams(); 
   diagnosticReport: any;
   presentedForms: any;
@@ -90,16 +105,6 @@ export class GenomicsReport implements ComponentInterface {
   readonly FHIRPATH_SPECIMEN: string = `Bundle.entry.resource.where(resourceType='Specimen').single()`;
   readonly FHIRPATH_TMB: string = `Bundle.entry.resource.where(resourceType='Observation').where(code.coding.system='http://loinc.org' and code.coding.code='94076-7')
     .interpretation.coding.where(system='http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation').display`;
-
-  /* Validators */
-  @Watch('fhirBaseUrl')
-  validateFhirBaseUrl() {
-    if (this.fhirBaseUrl == null){ throw new Error('fhir-base-url: required'); }
-  }
-  @Watch('idGenomicsReport')
-  validateIdGenomicsReport() {
-    if (this.idGenomicsReport == null){ throw new Error('id-molecular-report: required'); } 
-  }
 
   /* computed */
   getParams() {
@@ -219,26 +224,109 @@ export class GenomicsReport implements ComponentInterface {
     if(this.diagnosticReport){ 
     return ([
       <div> 
-        <h5>{this.localeString.report}</h5>
-          <div>{this.localeString.issued}: {this.diagnosticReport.issued}</div>
-          <div>{this.localeString.status}: {this.diagnosticReport.status}</div>
+        <h4>{this.localeString.report}</h4>
+        {!this.metaAsTable ? 
           <div>
-          {this.localeString.documents}:  
-            {this.presentedForms.map((document, index) =>
-              <a key={this.getDocumentUrl(document.url)}>
-                { index + 1 }
-              </a>
-            )}
+            <h5>{this.localeString.meta}</h5>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.issued}</label>
+              {this.diagnosticReport.issued ?
+                <label class="col-md-9 col-form-label">{ new Date(this.diagnosticReport.issued).toLocaleString() }</label>
+              : null}           
+            </div>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.status}</label>
+              <label class="col-md-9 col-form-label">{this.diagnosticReport.status}</label>
+            </div>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.documents}</label>
+              <label class="col-md-9 col-form-label">
+                {this.presentedForms.map((document, index) =>
+                  <a key={this.getDocumentUrl(document.url)}>
+                    { index + 1 }
+                  </a>
+                )}
+              </label> 
+            </div>
+            <h5>{this.localeString.otherObservations}</h5>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.chromosomalInstability}</label>
+              <label class="col-md-9 col-form-label">{this.chromosomalInstability().toString() }</label>  
+            </div>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.germlinePathogenicity}</label>
+              <label class="col-md-9 col-form-label">{this.germlinePathogenicity()}</label>
+            </div>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.percentageTumorTissue}</label>
+              <label class="col-md-9 col-form-label">{this.percentTumorTissue()}</label> 
+            </div>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.quality}</label>
+              <label class="col-md-9 col-form-label">{this.qualityFlags() }</label>
+            </div>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.msi}</label>
+              <label class="col-md-9 col-form-label">{this.msi()}</label> 
+            </div>
+            <div class="form-row">
+              <label class="col-md-3 col-form-label">{this.localeString.tmb}</label>
+              <label class="col-md-9 col-form-label">{this.tmb()}</label>
+            </div>
           </div>
-            <hr />
-        <h5>{this.localeString.meta}</h5>
-          <div>{this.localeString.chromosomalInstability}: {this.chromosomalInstability().toString() }</div>
-          <div>{this.localeString.germlinePathogenicity}: {this.germlinePathogenicity()}</div>
-          <div>{this.localeString.percentageTumorTissue}: {this.percentTumorTissue()}</div>
-            <div>{this.localeString.quality}: {this.qualityFlags() }</div>
-            <div>{this.localeString.msi}: {this.msi()}</div>
-            <div>{this.localeString.tmb}: {this.tmb()}</div>
-            <hr />
+        : 
+          <div>
+            <table class="table table-sm table-hover meta-table" v-else>
+              <tbody>
+                <tr>
+                  <th>{this.localeString.issued}</th>
+                  <td>
+                    <span v-if="diagnosticReport.issued">{ new Date(this.diagnosticReport.issued).toLocaleString() }</span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.status}</th>
+                  <td>{this.diagnosticReport.status}</td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.documents}</th>
+                  <td>
+                    {this.presentedForms.map((document, index) =>
+                      <a key={this.getDocumentUrl(document.url)}>
+                        { index + 1 }
+                      </a>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.chromosomalInstability}</th>
+                  <td>{this.chromosomalInstability().toString() }</td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.germlinePathogenicity}</th>
+                  <td>{this.germlinePathogenicity()}</td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.percentageTumorTissue}</th>
+                  <td>{this.percentTumorTissue()}</td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.quality}</th>
+                  <td>{this.qualityFlags() }</td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.msi}</th>
+                  <td>{this.msi()}</td>
+                </tr>
+                <tr>
+                  <th>{this.localeString.tmb}</th>
+                  <td>{this.tmb()}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        }
+        
         <div>
           <h4>{this.localeString.allVariants}</h4>
           { this.snvs && this.snvs.length ? 

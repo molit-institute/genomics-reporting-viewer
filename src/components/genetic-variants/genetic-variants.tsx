@@ -10,6 +10,14 @@ import { getLocaleComponentStrings } from "../../util/locale";
   scoped: true
 })
 export class GeneticVariants implements ComponentInterface {
+
+  @Element() element: HTMLElement;
+
+  @State() localeString: any;
+  @State() showId: boolean = true;
+  @State() filteredComponents: Array<any> = []; 
+  @State() showDropdown: boolean = false; 
+
   /**
    * If `true`, the table will include a column to show the ID.
    */
@@ -91,19 +99,6 @@ export class GeneticVariants implements ComponentInterface {
     this.localeString = await getLocaleComponentStrings(this.element, newValue);
   }
 
-  @Element() element: HTMLElement;
-
-  @State() localeString: any;
-  @State() showId: boolean = true;
-  @State() filteredComponents: Array<any> = []; 
-  @State() showDropdown: boolean = false; 
-
-  readonly EXPRESSION_BASE: string = "Observation.component.where(code.coding.system='%system' and code.coding.code='%code')"; 
-  readonly EXPRESSION_CODEABLE_CONCEPT: string = this.EXPRESSION_BASE + ".valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)"; 
-  readonly EXPRESSION_QUANTITY: string = this.EXPRESSION_BASE + ".valueQuantity.value";
-  readonly EXPRESSION_RANGE: string = this.EXPRESSION_BASE + ".valueRange.select(iif($this.low.value.exists(), $this.low.value.toString(), '') + '-' + iif($this.high.value.exists(), $this.high.value.toString(), ''))";
-  readonly EXPRESSION_INTEGER: string = this.EXPRESSION_BASE + ".valueInteger";
-  readonly EXPRESSION_STRING: string = this.EXPRESSION_BASE + ".valueString";
   parsedObservations: any;
   allComponents = [
     {
@@ -296,6 +291,13 @@ export class GeneticVariants implements ComponentInterface {
     }
   ];
 
+  readonly EXPRESSION_BASE: string = "Observation.component.where(code.coding.system='%system' and code.coding.code='%code')"; 
+  readonly EXPRESSION_CODEABLE_CONCEPT: string = this.EXPRESSION_BASE + ".valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)"; 
+  readonly EXPRESSION_QUANTITY: string = this.EXPRESSION_BASE + ".valueQuantity.value";
+  readonly EXPRESSION_RANGE: string = this.EXPRESSION_BASE + ".valueRange.select(iif($this.low.value.exists(), $this.low.value.toString(), '') + '-' + iif($this.high.value.exists(), $this.high.value.toString(), ''))";
+  readonly EXPRESSION_INTEGER: string = this.EXPRESSION_BASE + ".valueInteger";
+  readonly EXPRESSION_STRING: string = this.EXPRESSION_BASE + ".valueString";
+
   /* computed */
   id() {
     return uniqueId();
@@ -399,7 +401,7 @@ export class GeneticVariants implements ComponentInterface {
     return ([
       <div>
         <div class="genetic-header"> 
-          <h5>{ this.gvTitle }</h5>
+          <h6>{ this.gvTitle }</h6>
           {this.showColumnHideOptions ? 
             <button type="button" class="btn btn-link" onClick={() => this.toggleDropdown() }>{this.localeString.columnSelection} &#9662;</button>
            : null }
@@ -432,6 +434,7 @@ export class GeneticVariants implements ComponentInterface {
         <table class="table table-sm" style={{background: this.tableBackground }}>
           <thead>
             <tr style={{background: this.tableHeaderBackground }}>
+              <th></th> {/* effect? */}
               {this.showId ? <th>{this.localeString.id} </th> : null}
               {this.visibleComponents().map(component =>
               <th key={component.system + '/' + component.code}>{ component.display }</th>
@@ -441,6 +444,12 @@ export class GeneticVariants implements ComponentInterface {
           <tbody>
             {this.parsedObservations.map(resource =>
               <tr key={resource.id}>
+                <td>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px">
+                    <path d="M0 0h24v24H0V0z" fill="none"/>
+                    <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+                  </svg>
+                </td> {/* effect? */}
                 {this.showId ? <td>{ resource.id } </td> : null}
                 {this.visibleComponents().map(component =>
                   <td key={component.system + '/' + component.code}>
