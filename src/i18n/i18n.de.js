@@ -12,6 +12,7 @@ export default {
     "otherObservations": "Sonstige Untersuchungen",
     "percentageTumorTissue": "Anteil Tumorgewebe",
     "quality": "Qualität",
+    "relevantVariants": "Relevante Varianten",
     "report": "Genetischer Befund",
     "status": "Status",
     "tmb": "TMB"

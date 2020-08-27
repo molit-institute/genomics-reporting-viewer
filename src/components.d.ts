@@ -74,11 +74,11 @@ export namespace Components {
          */
         "tableHeaderBackground": string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantBackground": string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the header background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantHeaderBackground": string;
         /**
@@ -127,6 +127,7 @@ declare namespace LocalJSX {
           * Language property of the component. </br> Currently suported: [de, en]
          */
         "locale"?: string;
+        "onChangeRelevant"?: (event: CustomEvent<any>) => void;
         /**
           * If `true`, the component will show a button to select column options.
          */
@@ -175,11 +176,11 @@ declare namespace LocalJSX {
          */
         "tableHeaderBackground"?: string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantBackground"?: string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the header background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantHeaderBackground"?: string;
         /**

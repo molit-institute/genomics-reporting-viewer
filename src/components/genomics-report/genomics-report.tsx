@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch, State, Element } from '@stencil/core';
+import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch, State, Element, Listen } from '@stencil/core';
 import { fetchResources } from "@molit/fhir-api"; 
 import {fhirpath} from "../../util/fhirpath/fhirpath.min.js";
 import { getLocaleComponentStrings } from "../../util/locale";
@@ -14,6 +14,7 @@ export class GenomicsReport implements ComponentInterface {
 
   @Element() element: HTMLElement;
 
+  @State() changedRelevant: boolean = false; //TODO find better way of triggering render upon change
   @State() localeString: any;
   
   /**
@@ -45,14 +46,14 @@ export class GenomicsReport implements ComponentInterface {
    * Defines colour of the header background of *genetic-variants*-table
    */
   @Prop() tableHeaderBackground: string = "#ecf0f1";
-  /**
-   * TODO Funtionalty to be added
+/**
+   * Defines colour of the background of *genetic-variants*-table containing relevant variants
    */
-  @Prop() tableRelevantBackground: string = "#ecf0f1";
+  @Prop() tableRelevantBackground: string = "#8fd0e3"; //TODO add correct colour
   /**
-   * TODO Funtionalty to be added
+   * Defines colour of the header background of *genetic-variants*-table containing relevant variants
    */
-  @Prop() tableRelevantHeaderBackground: string = "#ecf0f1";
+  @Prop() tableRelevantHeaderBackground: string = "#8fd0e3"; //TODO add correct colour
   /**
    * TODO Funtionalty to be added
    */
@@ -76,9 +77,13 @@ export class GenomicsReport implements ComponentInterface {
   params: any = this.getParams(); 
   diagnosticReport: any;
   presentedForms: any;
+  importantVariants: any;
   svs: any[];
   snvs: any[];
   cnvs: any[];
+  relevantSvs: any[];
+  relevantSnvs: any[];
+  relevantCnvs: any[];
 
   readonly FHIRPATH_CHROMOSOMAL_INSTABILITY: string = `Bundle.entry.resource.where(resourceType='Observation').where(code.coding.system='http://ncit.nci.nih.gov' and code.coding.code='C48195').valueBoolean`;
   readonly FHIRPATH_CNVS: string = `Bundle.entry.resource.where(resourceType='Observation')
@@ -114,13 +119,55 @@ export class GenomicsReport implements ComponentInterface {
     params.append("_include", "DiagnosticReport:performer");
     params.append("_include", "DiagnosticReport:specimen");
     params.append("_include", "DiagnosticReport:subject");
-    params.append("_count", '1'); //TODO Check if correct... (1 wasn't in '' originaly. Error: Argument of type '1' is not assignable to parameter of type 'string')
+    params.append("_count", '1'); 
     return params;
   };
 
   getDiagnosticReport() {
     return fhirpath.evaluate(this.bundle, this.FHIRPATH_DIAGNOSTIC_REPORT)[0];
   };
+
+  getImportantVariants(){ //TODO Http Request
+    return {
+      "resourceType": "List",
+      "id" : "importantVariants",
+      "extension": [
+        {
+          "url": "http://molit.eu/fhir/vitu/StructureDefinition/DiagnosticReport",
+          "valueReference": "DiagnosticReport/5f7ee91b-6aa1-4f5c-a4c1-013a36040803"
+        }
+      ],
+      "status": "current",
+      "mode": "working",
+      "code": {
+        "coding": [
+          {
+            "system": "http://ncit.nci.nih.gov",
+            "code": "C115916",
+            "display": "Important"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/2f4b2548-71d6-48dd-81eb-067538ace523"
+      },
+      "encounter": {
+        "reference": "Encounter/b275c583-b280-46b8-a18c-078e74d87399"
+      },
+      "entry": [
+        {
+          "item": {
+            "reference": "Observation/354"
+          }
+        },
+        {
+          "item": {
+            "reference": "Observation/356"
+          }
+        }
+      ]
+    }
+  }
 
   getPresentedForms() {
     if (!this.diagnosticReport || !this.diagnosticReport.presentedForm) { 
@@ -182,6 +229,37 @@ export class GenomicsReport implements ComponentInterface {
   };
 
   /* methods */
+
+  addRelevantToObservations(observations: any[]){ 
+    for (var i = 0, len = observations.length; i < len; i++) {
+      const idString = "Observation/" + observations[i].id;
+      if(this.importantVariants.entry.some(e => e.item.reference.toString() === idString)){
+        observations[i].relevant = true;   
+      }else{
+        observations[i].relevant = false;   
+      }  
+    }
+    return observations;
+  }
+  @Listen('changeRelevant')
+  handleChangeRelevant(event: CustomEvent){ //Update importantVariants in Server
+    const idString = "Observation/" + event.detail.id;
+    if(event.detail.relevant === true){ //Adds new entry to importantVariants.entry      
+      this.importantVariants.entry = [
+        ...this.importantVariants.entry, {"item":{"reference": idString}}
+      ]
+    }else{ //Removes entry from importantVariants.entry
+    const entry = JSON.stringify({item:{reference:idString}});
+    for (var i = 0, len =  this.importantVariants.entry.length; i < len; i++) {
+      const currentEntry = JSON.stringify(this.importantVariants.entry[i]);
+      if(currentEntry === entry){
+        this.importantVariants.entry.splice(this.importantVariants.entry[i], 1); 
+      }
+    }
+    }
+    this.changedRelevant = !this.changedRelevant;
+  }
+
   @Event() errorOccurred: EventEmitter;
   async fetchResources() {
     try {
@@ -192,6 +270,19 @@ export class GenomicsReport implements ComponentInterface {
       this.errorOccurred.emit(e);
     }
   };
+
+  filterRelevant(observations: any[]){
+    var filterObservations = [];
+    for (var i = 0, len = observations.length; i < len; i++) {
+      if(observations[i].relevant === true){
+        filterObservations = [
+          ...filterObservations,
+          observations[i]
+        ]
+      }
+    }
+    return filterObservations;
+  }
 
   getDocumentUrl(url) {
     if (url.startsWith("http")) {
@@ -215,9 +306,13 @@ export class GenomicsReport implements ComponentInterface {
     this.presentedForms = this.getPresentedForms();   
   };    
   componentWillRender(){
-    this.cnvs = this.getCnvs();
-    this.snvs = this.getSnvs();
-    this.svs = this.getSvs();
+    this.importantVariants = this.getImportantVariants();
+    this.cnvs = this.addRelevantToObservations(this.getCnvs());
+    this.snvs = this.addRelevantToObservations(this.getSnvs());
+    this.svs = this.addRelevantToObservations(this.getSvs());
+    this.relevantCnvs = this.filterRelevant(this.cnvs);
+    this.relevantSnvs = this.filterRelevant(this.snvs);
+    this.relevantSvs = this.filterRelevant(this.svs);
     }
   
   render() {
@@ -326,6 +421,22 @@ export class GenomicsReport implements ComponentInterface {
             </table>
           </div>
         }
+
+        <div>
+          <h4>{this.localeString.relevantVariants}</h4>
+          { this.relevantSnvs && this.relevantSnvs.length ? 
+            <genetic-variants geneticObservations={this.relevantSnvs} type="snv" gvTitle="SNVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
+          : null
+          }
+          {this.relevantCnvs && this.relevantCnvs.length ?
+            <genetic-variants geneticObservations={this.relevantCnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
+          : null
+          }
+          {this.relevantSvs && this.relevantSvs.length ? 
+            <genetic-variants geneticObservations={this.relevantSvs} type="sv" gvTitle="SVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
+          : null
+          }
+        </div>
         
         <div>
           <h4>{this.localeString.allVariants}</h4>

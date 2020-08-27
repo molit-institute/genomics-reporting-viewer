@@ -1,7 +1,8 @@
-import { Component, ComponentInterface, h, Prop, State, Watch, Element } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Watch, Element, Event, EventEmitter } from '@stencil/core';
 import {fhirpath} from "../../util/fhirpath/fhirpath.min.js";
 import uniqueId from "lodash";
 import { getLocaleComponentStrings } from "../../util/locale";
+import { starOutline, starFilled } from "../../util/svg-icons";
 
 @Component({
   tag: 'genetic-variants',
@@ -17,6 +18,7 @@ export class GeneticVariants implements ComponentInterface {
   @State() showId: boolean = true;
   @State() filteredComponents: Array<any> = []; 
   @State() showDropdown: boolean = false; 
+
 
   /**
    * If `true`, the table will include a column to show the ID.
@@ -385,6 +387,12 @@ export class GeneticVariants implements ComponentInterface {
     return ev.target.checked;
   }
 
+  @Event() changeRelevant: EventEmitter;
+  changeRelevantHandler(resourceId, relevant: boolean) {
+    const info = {"id": resourceId, "relevant": !relevant};  // Contains the id of the clicked resource and the boolean value relevant is supposed to be changed to
+    this.changeRelevant.emit(info);
+  }
+
   /* Lifecycle Methods */
   async componentWillLoad() {
     this.showId = !this.hideId;
@@ -445,10 +453,10 @@ export class GeneticVariants implements ComponentInterface {
             {this.parsedObservations.map(resource =>
               <tr key={resource.id}>
                 <td>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px">
-                    <path d="M0 0h24v24H0V0z" fill="none"/>
-                    <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-                  </svg>
+                  { resource.relevant===true ? 
+                    <span innerHTML={starFilled} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)}></span> 
+                  : <span innerHTML={starOutline} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)}></span>
+                  }
                 </td> {/* effect? */}
                 {this.showId ? <td>{ resource.id } </td> : null}
                 {this.visibleComponents().map(component =>
