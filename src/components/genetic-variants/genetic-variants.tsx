@@ -19,7 +19,6 @@ export class GeneticVariants implements ComponentInterface {
   @State() filteredComponents: Array<any> = []; 
   @State() showDropdown: boolean = false; 
 
-
   /**
    * If `true`, the table will include a column to show the ID.
    */
