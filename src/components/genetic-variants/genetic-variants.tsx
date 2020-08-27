@@ -452,11 +452,11 @@ export class GeneticVariants implements ComponentInterface {
             {this.parsedObservations.map(resource =>
               <tr key={resource.id}>
                 <td>
-                  { resource.relevant===true ? 
-                    <span innerHTML={starFilled} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)}></span> 
-                  : <span innerHTML={starOutline} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)}></span>
+                  { resource.relevant===true ?
+                    <a innerHTML={starFilled} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)} class="tip"> <span>{this.localeString.removeRelevantVariant}</span></a> 
+                  : <a innerHTML={starOutline} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)} class="tip"> <span>{this.localeString.addRelevantVariant}</span></a>
                   }
-                </td> {/* effect? */}
+                </td>
                 {this.showId ? <td>{ resource.id } </td> : null}
                 {this.visibleComponents().map(component =>
                   <td key={component.system + '/' + component.code}>

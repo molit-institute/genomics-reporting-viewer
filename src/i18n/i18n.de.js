@@ -1,4 +1,5 @@
 export default {
+    "addRelevantVariant": "Zu Relevanten Varianten hinzufügen",
     "allVariants": "Alle Varianten",
     "chromosomalInstability": "Chromosomale Instabilität",
     "columnSelection": "Spaltenauswahl",
@@ -13,6 +14,7 @@ export default {
     "percentageTumorTissue": "Anteil Tumorgewebe",
     "quality": "Qualität",
     "relevantVariants": "Relevante Varianten",
+    "removeRelevantVariant": "Aus Relevanten Varianten entfernen",
     "report": "Genetischer Befund",
     "status": "Status",
     "tmb": "TMB"
