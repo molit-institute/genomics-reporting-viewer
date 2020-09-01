@@ -46,7 +46,11 @@ export namespace Components {
     }
     interface GenomicsReport {
         /**
-          * TODO Funtionalty to be added
+          * If `true`, the component will show All Variants unfolded when first opened.
+         */
+        "enableAllVariants": boolean;
+        /**
+          * If `true`, the component will show Relevant Variants unfolded when first opened.
          */
         "enableRelevantVariants": boolean;
         /**
@@ -147,7 +151,11 @@ declare namespace LocalJSX {
     }
     interface GenomicsReport {
         /**
-          * TODO Funtionalty to be added
+          * If `true`, the component will show All Variants unfolded when first opened.
+         */
+        "enableAllVariants"?: boolean;
+        /**
+          * If `true`, the component will show Relevant Variants unfolded when first opened.
          */
         "enableRelevantVariants"?: boolean;
         /**

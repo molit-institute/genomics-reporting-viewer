@@ -2,6 +2,7 @@ import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch, Sta
 import { fetchResources } from "@molit/fhir-api"; 
 import {fhirpath} from "../../util/fhirpath/fhirpath.min.js";
 import { getLocaleComponentStrings } from "../../util/locale";
+import { keyboard_arrow_down, keyboard_arrow_right } from "../../util/svg-icons";
 
 
 @Component({
@@ -55,9 +56,13 @@ export class GenomicsReport implements ComponentInterface {
    */
   @Prop() tableRelevantHeaderBackground: string = "#8fd0e3"; //TODO add correct colour
   /**
-   * TODO Funtionalty to be added
+   * If `true`, the component will show Relevant Variants unfolded when first opened.
    */
   @Prop() enableRelevantVariants: boolean = false;
+    /**
+   * If `true`, the component will show All Variants unfolded when first opened.
+   */
+  @Prop() enableAllVariants: boolean = true;
   /**
    * Language property of the component. </br>
    * Currently suported: [de, en]
@@ -291,6 +296,12 @@ export class GenomicsReport implements ComponentInterface {
       return `${this.fhirBaseUrl}/${url}`;
     }
   };
+  enableRelevantV(){
+    this.enableRelevantVariants = !this.enableRelevantVariants;
+  }
+  enableAllV(){
+    this.enableAllVariants = !this.enableAllVariants;
+  }
   
   /* Lifecycle Methods */
   async componentWillLoad() { 
@@ -421,9 +432,15 @@ export class GenomicsReport implements ComponentInterface {
             </table>
           </div>
         }
-
-        <div>
-          <h4>{this.localeString.relevantVariants}</h4>
+        <h4>
+          { this.enableRelevantVariants ?
+            <a innerHTML={keyboard_arrow_down} onClick={() => this.enableRelevantV()}> </a> 
+          : <a innerHTML={keyboard_arrow_right} onClick={() => this.enableRelevantV()}> </a>
+          }
+          {this.localeString.relevantVariants}
+        </h4>
+        {this.enableRelevantVariants ?
+          <div>
           { this.relevantSnvs && this.relevantSnvs.length ? 
             <genetic-variants geneticObservations={this.relevantSnvs} type="snv" gvTitle="SNVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
           : null
@@ -436,24 +453,31 @@ export class GenomicsReport implements ComponentInterface {
             <genetic-variants geneticObservations={this.relevantSvs} type="sv" gvTitle="SVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
           : null
           }
-        </div>
-        
-        <div>
-          <h4>{this.localeString.allVariants}</h4>
-          { this.snvs && this.snvs.length ? 
-            <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
-          : null
+          </div> 
+        : null}
+        <h4>
+          { this.enableAllVariants ?
+            <a innerHTML={keyboard_arrow_down} onClick={() => this.enableAllV()}> </a> 
+          : <a innerHTML={keyboard_arrow_right} onClick={() => this.enableAllV()}> </a>
           }
-          {this.cnvs && this.cnvs.length ?
-            <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
-          : null
-          }
-          {this.svs && this.svs.length ? 
-            <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
-          : null
-          }
-        </div>
-        
+          {this.localeString.allVariants}
+        </h4>
+        {this.enableAllVariants ? 
+          <div>
+            { this.snvs && this.snvs.length ? 
+              <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            : null
+            }
+            {this.cnvs && this.cnvs.length ?
+              <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            : null
+            }
+            {this.svs && this.svs.length ? 
+              <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            : null
+            }
+          </div>
+        : null} 
       </div>
      ]);
   }}

@@ -20,6 +20,13 @@
 | `type`                  | `type`                     | Can be one of the following: "snv", "cnv", "sv"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `string`  | `"snv"`      |
 
 
+## Events
+
+| Event            | Description | Type               |
+| ---------------- | ----------- | ------------------ |
+| `changeRelevant` |             | `CustomEvent<any>` |
+
+
 ## Dependencies
 
 ### Used by
