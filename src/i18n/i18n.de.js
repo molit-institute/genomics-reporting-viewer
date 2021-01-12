@@ -9,10 +9,12 @@ export default {
     "issued": "Befunddatum",
     "meta": "Meta",
     "msi": "MSI",
+    "openVariantBrowser": "Variant Browser öffnen",
     "otherObservations": "Sonstige Untersuchungen",
     "percentageTumorTissue": "Anteil Tumorgewebe",
     "quality": "Qualität",
     "report": "Genetischer Befund",
     "status": "Status",
-    "tmb": "TMB"
+    "tmb": "TMB",    
+    "variantBrowser": "Variant Browser"
 }

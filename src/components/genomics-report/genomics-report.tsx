@@ -70,7 +70,11 @@ export class GenomicsReport implements ComponentInterface {
   /**
    * If `true`, the component will show meta informations as a table. 
    */
-  @Prop() metaAsTable: boolean = false;
+  @Prop() metaAsTable: boolean = false;  
+  /**
+   * If `true`, the table will include a column to show a link to open the Variant Browser. 
+   */
+  @Prop() hideLinkVariantBrowser: boolean = false; 
   
   bundle: any; 
   params: any = this.getParams(); 
@@ -330,15 +334,15 @@ export class GenomicsReport implements ComponentInterface {
         <div>
           <h4>{this.localeString.allVariants}</h4>
           { this.snvs && this.snvs.length ? 
-            <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale} hideLinkVariantBrowser={this.hideLinkVariantBrowser}/>
           : null
           }
           {this.cnvs && this.cnvs.length ?
-            <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale} hideLinkVariantBrowser={this.hideLinkVariantBrowser}/>
           : null
           }
           {this.svs && this.svs.length ? 
-            <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale} hideLinkVariantBrowser={true}/>
           : null
           }
         </div>

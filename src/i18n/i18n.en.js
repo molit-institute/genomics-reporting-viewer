@@ -9,10 +9,12 @@ export default {
     "issued": "Issued",
     "meta": "Meta",
     "msi": "MSI",
+    "openVariantBrowser": "open Variant Browser",
     "otherObservations": "Other Observations",
     "percentageTumorTissue": "Percentage Tumor Tissue",
     "quality": "Quality",
     "report": "Genetic Report",
     "status": "Status",
-    "tmb": "TMB"
+    "tmb": "TMB",    
+    "variantBrowser": "Variant Browser"
 }

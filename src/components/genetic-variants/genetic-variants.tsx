@@ -15,6 +15,7 @@ export class GeneticVariants implements ComponentInterface {
 
   @State() localeString: any;
   @State() showId: boolean = true;
+  @State() showVariantBrowser: boolean;
   @State() filteredComponents: Array<any> = []; 
   @State() showDropdown: boolean = false; 
 
@@ -22,6 +23,10 @@ export class GeneticVariants implements ComponentInterface {
    * If `true`, the table will include a column to show the ID.
    */
   @Prop() hideId: boolean = false;
+  /**
+   * If `true`, the table will include a column to show a link to open the Variant Browser.
+   */
+  @Prop() hideLinkVariantBrowser: boolean = false;
   /**
    * If `true`, the component will show a button to select column options. 
    */
@@ -297,6 +302,12 @@ export class GeneticVariants implements ComponentInterface {
   readonly EXPRESSION_RANGE: string = this.EXPRESSION_BASE + ".valueRange.select(iif($this.low.value.exists(), $this.low.value.toString(), '') + '-' + iif($this.high.value.exists(), $this.high.value.toString(), ''))";
   readonly EXPRESSION_INTEGER: string = this.EXPRESSION_BASE + ".valueInteger";
   readonly EXPRESSION_STRING: string = this.EXPRESSION_BASE + ".valueString";
+  readonly CHROMOSOME: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='48001-2').valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)";
+  readonly START: string = "Observation.component.where(code.coding.system='http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes' and code.coding.code='exact-start-end').valueRange.select(iif($this.low.value.exists(), $this.low.value.toString(), '') + '-' + iif($this.high.value.exists(), $this.high.value.toString(), ''))";
+  readonly REF_ALLELE: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='69547-8').valueString";
+  readonly ALT_ALLELE: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='69551-0').valueString";
+  readonly C_HGVS: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='48004-6').valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)";
+  readonly P_HGVS: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='48005-3').valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)";
 
   /* computed */
   id() {
@@ -320,6 +331,35 @@ export class GeneticVariants implements ComponentInterface {
       return null;
     }
     return component.link.url.replace("%s", value);
+  };
+
+  getVariantBrowserURL(observation) {
+    const baseURL = "https://variant-browser.molit.eu/";
+    let url = baseURL;
+    const chromosome =  this.getComponentValues(observation, this.CHROMOSOME);
+    let start =  this.getComponentValues(observation, this.START);     
+    const ref_allele =  this.getComponentValues(observation, this.REF_ALLELE);
+    const alt_allele =  this.getComponentValues(observation, this.ALT_ALLELE);
+    const cHGVS = this.getComponentValues(observation, this.C_HGVS);
+    const pHGVS = this.getComponentValues(observation, this.P_HGVS);
+    switch(this.type){
+      case "snv":
+        if (chromosome.length && start.length && ref_allele.length && alt_allele.length){
+          if(start[0].endsWith("-")){
+            start = start[0].slice(0,-1);
+          }
+          url = url + "?q=" + chromosome + ":g." + start + ref_allele + ">" + alt_allele;
+        } else if (cHGVS.length && pHGVS) {
+          url = url + "?q=" + cHGVS + " " + pHGVS
+        }
+      break;
+      case "cnv":
+        if (chromosome.length && start.length){
+          url = url + "?q=" + chromosome + ":" + start;
+        }
+      break;  
+    }
+    return url;
   };
 
   toggleDropdown() { 
@@ -388,6 +428,7 @@ export class GeneticVariants implements ComponentInterface {
   /* Lifecycle Methods */
   async componentWillLoad() {
     this.showId = !this.hideId;
+    this.showVariantBrowser = !this.hideLinkVariantBrowser;
     this.initializeComponents();
     this.parseGeneticObservations();
     try {
@@ -437,8 +478,9 @@ export class GeneticVariants implements ComponentInterface {
               <th></th> {/* effect? */}
               {this.showId ? <th>{this.localeString.id} </th> : null}
               {this.visibleComponents().map(component =>
-              <th key={component.system + '/' + component.code}>{ component.display }</th>
+                <th key={component.system + '/' + component.code}>{ component.display }</th>
               )}
+              {this.showVariantBrowser ? <th>{this.localeString.variantBrowser} </th> : null}
             </tr>
           </thead>
           <tbody>
@@ -454,7 +496,7 @@ export class GeneticVariants implements ComponentInterface {
                 {this.visibleComponents().map(component =>
                   <td key={component.system + '/' + component.code}>
                     {this.getComponentValues(resource, component.expression).map(value =>
-                      <span key={value}>
+                      <span key={value}>                          
                         {(component.link && component.link.url && component.link.attribute ) ? 
                           (<span>
                           <a href={this.createLink(component, value)} target="_blank">{ value }</a> 
@@ -462,9 +504,17 @@ export class GeneticVariants implements ComponentInterface {
                           </span>)
                         : <span>{ value }&#32;</span>}                    
                       </span>
-                    )}                  
+                    )}
                   </td>
                 )}
+                {this.showVariantBrowser ? 
+                  <td>
+                    <span>
+                      <a href={this.getVariantBrowserURL(resource)} target="_blank"> {this.localeString.openVariantBrowser} </a> 
+                      &#32;
+                    </span>
+                  </td>
+                : null}                
               </tr>
             )}
           </tbody>
