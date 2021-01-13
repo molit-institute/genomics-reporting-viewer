@@ -302,12 +302,6 @@ export class GeneticVariants implements ComponentInterface {
   readonly EXPRESSION_RANGE: string = this.EXPRESSION_BASE + ".valueRange.select(iif($this.low.value.exists(), $this.low.value.toString(), '') + '-' + iif($this.high.value.exists(), $this.high.value.toString(), ''))";
   readonly EXPRESSION_INTEGER: string = this.EXPRESSION_BASE + ".valueInteger";
   readonly EXPRESSION_STRING: string = this.EXPRESSION_BASE + ".valueString";
-  readonly CHROMOSOME: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='48001-2').valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)";
-  readonly START: string = "Observation.component.where(code.coding.system='http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes' and code.coding.code='exact-start-end').valueRange.select(iif($this.low.value.exists(), $this.low.value.toString(), '') + '-' + iif($this.high.value.exists(), $this.high.value.toString(), ''))";
-  readonly REF_ALLELE: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='69547-8').valueString";
-  readonly ALT_ALLELE: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='69551-0').valueString";
-  readonly C_HGVS: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='48004-6').valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)";
-  readonly P_HGVS: string = "Observation.component.where(code.coding.system='http://loinc.org' and code.coding.code='48005-3').valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)";
 
   /* computed */
   id() {
@@ -336,12 +330,15 @@ export class GeneticVariants implements ComponentInterface {
   getVariantBrowserURL(observation) {
     const baseURL = "https://variant-browser.molit.eu/";
     let url = baseURL;
-    const chromosome =  this.getComponentValues(observation, this.CHROMOSOME);
-    let start =  this.getComponentValues(observation, this.START);     
-    const ref_allele =  this.getComponentValues(observation, this.REF_ALLELE);
-    const alt_allele =  this.getComponentValues(observation, this.ALT_ALLELE);
-    const cHGVS = this.getComponentValues(observation, this.C_HGVS);
-    const pHGVS = this.getComponentValues(observation, this.P_HGVS);
+    let c = this.EXPRESSION_CODEABLE_CONCEPT;    
+    let r = this.EXPRESSION_RANGE;
+    let s = this.EXPRESSION_STRING;
+    const chromosome =  this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48001-2"));
+    let start =  this.getComponentValues(observation, r.replace("%system", "http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes").replace("%code", "exact-start-end"));
+    const ref_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69547-8"));
+    const alt_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69551-0"));
+    const cHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48004-6"));
+    const pHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48005-3"));
     switch(this.type){
       case "snv":
         if (chromosome.length && start.length && ref_allele.length && alt_allele.length){
@@ -396,14 +393,14 @@ export class GeneticVariants implements ComponentInterface {
     if (this.components) {
         try {
           const parsedComponents = JSON.parse(this.components);
-          this.filteredComponents = this.addExpressionsToComponents(parsedComponents);
+          this.filteredComponents = this.addExpressionsToComponents(parsedComponents);          
         } catch (e) {
           console.error("The specified string for components is not valid JSON")
         }
     } else {
       this.allComponents = this.addExpressionsToComponents(this.allComponents);
       this.filteredComponents = this.allComponents.filter(c => c && c.variantTypes && c.variantTypes.includes(this.type));
-    } 
+    }
   }
   
   parseGeneticObservations(){
