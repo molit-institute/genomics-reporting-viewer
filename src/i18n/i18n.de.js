@@ -16,5 +16,6 @@ export default {
     "report": "Genetischer Befund",
     "status": "Status",
     "tmb": "TMB",    
-    "variantBrowser": "Variant Browser"
+    "variantBrowser": "Variant Browser",
+    "variantBrowserShort": "VB"
 }

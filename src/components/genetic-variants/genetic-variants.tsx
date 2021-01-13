@@ -507,7 +507,7 @@ export class GeneticVariants implements ComponentInterface {
                 {this.showVariantBrowser ? 
                   <td>
                     <span>
-                      <a href={this.getVariantBrowserURL(resource)} target="_blank"> {this.localeString.openVariantBrowser} </a> 
+                      <a href={this.getVariantBrowserURL(resource)} title={this.localeString.openVariantBrowser} target="_blank"> {this.localeString.variantBrowserShort} </a> 
                       &#32;
                     </span>
                   </td>
