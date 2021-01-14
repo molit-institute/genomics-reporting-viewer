@@ -334,11 +334,13 @@ export class GeneticVariants implements ComponentInterface {
     let r = this.EXPRESSION_RANGE;
     let s = this.EXPRESSION_STRING;
     const chromosome =  this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48001-2"));
+    const ref = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "62374-4"));
     let start =  this.getComponentValues(observation, r.replace("%system", "http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes").replace("%code", "exact-start-end"));
     const ref_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69547-8"));
-    const alt_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69551-0"));
+    const alt_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69551-0"));    
     const cHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48004-6"));
     const pHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48005-3"));
+    console.log(ref);
     switch(this.type){
       case "snv":
         if (chromosome.length && start.length && ref_allele.length && alt_allele.length){
@@ -346,16 +348,26 @@ export class GeneticVariants implements ComponentInterface {
             start = start[0].slice(0,-1);
           }
           url = url + "?q=" + chromosome + ":g." + start + ref_allele + ">" + alt_allele;
-        } else if (cHGVS.length && pHGVS) {
-          url = url + "?q=" + cHGVS + " " + pHGVS
+          if(ref.length){
+            url = url + "&ref=" + ref;
+          }
+        } else if (cHGVS.length && pHGVS.length) {
+          url = url + "?q=" + cHGVS + " " + pHGVS;
+          if(ref.length){
+            url = url + "&ref=" + ref;
+          }
         }
       break;
       case "cnv":
         if (chromosome.length && start.length){
           url = url + "?q=" + chromosome + ":" + start;
+          if(ref.length){
+            url = url + "&ref=" + ref;
+          }
         }
       break;  
     }
+    console.log(url)
     return url;
   };
 
