@@ -340,7 +340,7 @@ export class GeneticVariants implements ComponentInterface {
     const alt_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69551-0"));    
     const cHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48004-6"));
     const pHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48005-3"));
-    console.log(ref);
+
     switch(this.type){
       case "snv":
         if (chromosome.length && start.length && ref_allele.length && alt_allele.length){
@@ -356,6 +356,7 @@ export class GeneticVariants implements ComponentInterface {
           if(ref.length){
             url = url + "&ref=" + ref;
           }
+
         }
       break;
       case "cnv":
@@ -367,7 +368,6 @@ export class GeneticVariants implements ComponentInterface {
         }
       break;  
     }
-    console.log(url)
     return url;
   };
 
