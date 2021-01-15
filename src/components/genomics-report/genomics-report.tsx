@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch, State, Element, Listen } from '@stencil/core';
-import { fetchResources } from "@molit/fhir-api"; 
+import { fetchResources } from "@molit/fhir-api";
 import {fhirpath} from "../../util/fhirpath/fhirpath.min.js";
 import { getLocaleComponentStrings } from "../../util/locale";
 import { keyboard_arrow_down, keyboard_arrow_right } from "../../util/svg-icons";
@@ -17,9 +17,9 @@ export class GenomicsReport implements ComponentInterface {
 
   @State() changedRelevant: boolean = false; //TODO find better way of triggering render upon change
   @State() localeString: any;
-  
+
   /**
-   * Base URL to fhir-resource 
+   * Base URL to fhir-resource
    */
   @Prop() fhirBaseUrl!: string;
   @Watch('fhirBaseUrl')
@@ -32,8 +32,8 @@ export class GenomicsReport implements ComponentInterface {
   @Prop() idGenomicsReport!: string;
   @Watch('idGenomicsReport')
   validateIdGenomicsReport() {
-    if (this.idGenomicsReport == null){ throw new Error('id-molecular-report: required'); } 
-  } 
+    if (this.idGenomicsReport == null){ throw new Error('id-molecular-report: required'); }
+  }
   /**
    * Authentication token that will be added to the Authorization Header within all request in the fhir-server. </br>
    * ```Authorization: Bearer <token>```
@@ -74,12 +74,16 @@ export class GenomicsReport implements ComponentInterface {
     this.localeString = await getLocaleComponentStrings(this.element, newValue);
   }
   /**
-   * If `true`, the component will show meta informations as a table. 
+   * If `true`, the component will show meta informations as a table.
    */
   @Prop() metaAsTable: boolean = false;
-  
-  bundle: any; 
-  params: any = this.getParams(); 
+  /**
+   * If `true`, the table will include a column to show a link to open the Variant Browser.
+   */
+  @Prop() hideLinkVariantBrowser: boolean = false;
+
+  bundle: any;
+  params: any = this.getParams();
   diagnosticReport: any;
   presentedForms: any;
   importantVariants: any;
@@ -124,7 +128,7 @@ export class GenomicsReport implements ComponentInterface {
     params.append("_include", "DiagnosticReport:performer");
     params.append("_include", "DiagnosticReport:specimen");
     params.append("_include", "DiagnosticReport:subject");
-    params.append("_count", '1'); 
+    params.append("_count", '1');
     return params;
   };
 
@@ -175,10 +179,10 @@ export class GenomicsReport implements ComponentInterface {
   }
 
   getPresentedForms() {
-    if (!this.diagnosticReport || !this.diagnosticReport.presentedForm) { 
+    if (!this.diagnosticReport || !this.diagnosticReport.presentedForm) {
       return [];
     } else {
-      return this.diagnosticReport.presentedForm; 
+      return this.diagnosticReport.presentedForm;
     }
   };
 
@@ -235,21 +239,21 @@ export class GenomicsReport implements ComponentInterface {
 
   /* methods */
 
-  addRelevantToObservations(observations: any[]){ 
+  addRelevantToObservations(observations: any[]){
     for (var i = 0, len = observations.length; i < len; i++) {
       const idString = "Observation/" + observations[i].id;
       if(this.importantVariants.entry.some(e => e.item.reference.toString() === idString)){
-        observations[i].relevant = true;   
+        observations[i].relevant = true;
       }else{
-        observations[i].relevant = false;   
-      }  
+        observations[i].relevant = false;
+      }
     }
     return observations;
   }
   @Listen('changeRelevant')
   handleChangeRelevant(event: CustomEvent){ //Update importantVariants in Server
     const idString = "Observation/" + event.detail.id;
-    if(event.detail.relevant === true){ //Adds new entry to importantVariants.entry      
+    if(event.detail.relevant === true){ //Adds new entry to importantVariants.entry
       this.importantVariants.entry = [
         ...this.importantVariants.entry, {"item":{"reference": idString}}
       ]
@@ -258,7 +262,7 @@ export class GenomicsReport implements ComponentInterface {
     for (var i = 0, len =  this.importantVariants.entry.length; i < len; i++) {
       const currentEntry = JSON.stringify(this.importantVariants.entry[i]);
       if(currentEntry === entry){
-        this.importantVariants.entry.splice(this.importantVariants.entry[i], 1); 
+        this.importantVariants.entry.splice(this.importantVariants.entry[i], 1);
       }
     }
     }
@@ -269,7 +273,7 @@ export class GenomicsReport implements ComponentInterface {
   async fetchResources() {
     try {
       const response = await fetchResources(this.fhirBaseUrl, "DiagnosticReport", this.params, this.token);
-      this.bundle = response.data;    
+      this.bundle = response.data;
     } catch (e) {
       console.error(e);
       this.errorOccurred.emit(e);
@@ -302,20 +306,20 @@ export class GenomicsReport implements ComponentInterface {
   enableAllV(){
     this.enableAllVariants = !this.enableAllVariants;
   }
-  
+
   /* Lifecycle Methods */
-  async componentWillLoad() { 
+  async componentWillLoad() {
     try {
     this.validateFhirBaseUrl();
     this.validateIdGenomicsReport();
-    this.localeString = await getLocaleComponentStrings(this.element, this.locale);     
+    this.localeString = await getLocaleComponentStrings(this.element, this.locale);
     } catch (e) {
       console.error(e);
     }
-    await this.fetchResources(); 
+    await this.fetchResources();
     this.diagnosticReport = this.getDiagnosticReport();
-    this.presentedForms = this.getPresentedForms();   
-  };    
+    this.presentedForms = this.getPresentedForms();
+  };
   componentWillRender(){
     this.importantVariants = this.getImportantVariants();
     this.cnvs = this.addRelevantToObservations(this.getCnvs());
@@ -325,20 +329,20 @@ export class GenomicsReport implements ComponentInterface {
     this.relevantSnvs = this.filterRelevant(this.snvs);
     this.relevantSvs = this.filterRelevant(this.svs);
     }
-  
+
   render() {
-    if(this.diagnosticReport){ 
+    if(this.diagnosticReport){
     return ([
-      <div> 
+      <div>
         <h4>{this.localeString.report}</h4>
-        {!this.metaAsTable ? 
+        {!this.metaAsTable ?
           <div>
             <h5>{this.localeString.meta}</h5>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.issued}</label>
               {this.diagnosticReport.issued ?
                 <label class="col-md-9 col-form-label">{ new Date(this.diagnosticReport.issued).toLocaleString() }</label>
-              : null}           
+              : null}
             </div>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.status}</label>
@@ -352,12 +356,12 @@ export class GenomicsReport implements ComponentInterface {
                     { index + 1 }
                   </a>
                 )}
-              </label> 
+              </label>
             </div>
             <h5>{this.localeString.otherObservations}</h5>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.chromosomalInstability}</label>
-              <label class="col-md-9 col-form-label">{this.chromosomalInstability().toString() }</label>  
+              <label class="col-md-9 col-form-label">{this.chromosomalInstability().toString() }</label>
             </div>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.germlinePathogenicity}</label>
@@ -365,7 +369,7 @@ export class GenomicsReport implements ComponentInterface {
             </div>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.percentageTumorTissue}</label>
-              <label class="col-md-9 col-form-label">{this.percentTumorTissue()}</label> 
+              <label class="col-md-9 col-form-label">{this.percentTumorTissue()}</label>
             </div>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.quality}</label>
@@ -373,14 +377,14 @@ export class GenomicsReport implements ComponentInterface {
             </div>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.msi}</label>
-              <label class="col-md-9 col-form-label">{this.msi()}</label> 
+              <label class="col-md-9 col-form-label">{this.msi()}</label>
             </div>
             <div class="form-row">
               <label class="col-md-3 col-form-label">{this.localeString.tmb}</label>
               <label class="col-md-9 col-form-label">{this.tmb()}</label>
             </div>
           </div>
-        : 
+        :
           <div>
             <table class="table table-sm table-hover meta-table" v-else>
               <tbody>
@@ -434,50 +438,50 @@ export class GenomicsReport implements ComponentInterface {
         }
         <h4>
           { this.enableRelevantVariants ?
-            <a innerHTML={keyboard_arrow_down} onClick={() => this.enableRelevantV()}> </a> 
+            <a innerHTML={keyboard_arrow_down} onClick={() => this.enableRelevantV()}> </a>
           : <a innerHTML={keyboard_arrow_right} onClick={() => this.enableRelevantV()}> </a>
           }
           {this.localeString.relevantVariants}
         </h4>
         {this.enableRelevantVariants ?
           <div>
-          { this.relevantSnvs && this.relevantSnvs.length ? 
-            <genetic-variants geneticObservations={this.relevantSnvs} type="snv" gvTitle="SNVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
+          { this.relevantSnvs && this.relevantSnvs.length ?
+            <genetic-variants geneticObservations={this.relevantSnvs} type="snv" gvTitle="SNVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale} hideLinkVariantBrowser={this.hideLinkVariantBrowser}/>
           : null
           }
           {this.relevantCnvs && this.relevantCnvs.length ?
-            <genetic-variants geneticObservations={this.relevantCnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
+            <genetic-variants geneticObservations={this.relevantCnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale} hideLinkVariantBrowser={this.hideLinkVariantBrowser}/>
           : null
           }
-          {this.relevantSvs && this.relevantSvs.length ? 
-            <genetic-variants geneticObservations={this.relevantSvs} type="sv" gvTitle="SVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale}/>
+          {this.relevantSvs && this.relevantSvs.length ?
+            <genetic-variants geneticObservations={this.relevantSvs} type="sv" gvTitle="SVs" tableBackground={this.tableRelevantBackground} tableHeaderBackground={this.tableRelevantHeaderBackground} locale={this.locale} hideLinkVariantBrowser={true}/>
           : null
           }
-          </div> 
+          </div>
         : null}
         <h4>
           { this.enableAllVariants ?
-            <a innerHTML={keyboard_arrow_down} onClick={() => this.enableAllV()}> </a> 
+            <a innerHTML={keyboard_arrow_down} onClick={() => this.enableAllV()}> </a>
           : <a innerHTML={keyboard_arrow_right} onClick={() => this.enableAllV()}> </a>
           }
           {this.localeString.allVariants}
         </h4>
-        {this.enableAllVariants ? 
+        {this.enableAllVariants ?
           <div>
-            { this.snvs && this.snvs.length ? 
-              <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            { this.snvs && this.snvs.length ?
+              <genetic-variants geneticObservations={this.snvs} type="snv" gvTitle="SNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale} hideLinkVariantBrowser={this.hideLinkVariantBrowser}/>
             : null
             }
             {this.cnvs && this.cnvs.length ?
-              <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+              <genetic-variants geneticObservations={this.cnvs} type="cnv" gvTitle="CNVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale} hideLinkVariantBrowser={this.hideLinkVariantBrowser}/>
             : null
             }
-            {this.svs && this.svs.length ? 
-              <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale}/>
+            {this.svs && this.svs.length ?
+              <genetic-variants geneticObservations={this.svs} type="sv" gvTitle="SVs" tableBackground={this.tableBackground} tableHeaderBackground={this.tableHeaderBackground} locale={this.locale} hideLinkVariantBrowser={true}/>
             : null
             }
           </div>
-        : null} 
+        : null}
       </div>
      ]);
   }}

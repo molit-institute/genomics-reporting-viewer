@@ -24,6 +24,10 @@ export namespace Components {
          */
         "hideId": boolean;
         /**
+          * If `true`, the table will include a column to show a link to open the Variant Browser.
+         */
+        "hideLinkVariantBrowser": boolean;
+        /**
           * Language property of the component. </br> Currently suported: [de, en]
          */
         "locale": string;
@@ -57,6 +61,10 @@ export namespace Components {
           * Base URL to fhir-resource
          */
         "fhirBaseUrl": string;
+        /**
+          * If `true`, the table will include a column to show a link to open the Variant Browser.
+         */
+        "hideLinkVariantBrowser": boolean;
         /**
           * ID of the to be requested resource
          */
@@ -128,6 +136,10 @@ declare namespace LocalJSX {
          */
         "hideId"?: boolean;
         /**
+          * If `true`, the table will include a column to show a link to open the Variant Browser.
+         */
+        "hideLinkVariantBrowser"?: boolean;
+        /**
           * Language property of the component. </br> Currently suported: [de, en]
          */
         "locale"?: string;
@@ -162,6 +174,10 @@ declare namespace LocalJSX {
           * Base URL to fhir-resource
          */
         "fhirBaseUrl": string;
+        /**
+          * If `true`, the table will include a column to show a link to open the Variant Browser.
+         */
+        "hideLinkVariantBrowser"?: boolean;
         /**
           * ID of the to be requested resource
          */
