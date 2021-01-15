@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, Prop, State, Watch, Element, Event, EventEmitter } from '@stencil/core';
-import {fhirpath} from "../../util/fhirpath/fhirpath.min.js";
+import { fhirpath } from "../../util/fhirpath/fhirpath.min.js";
 import uniqueId from "lodash";
 import { getLocaleComponentStrings } from "../../util/locale";
 import { starOutline, starFilled } from "../../util/svg-icons";
@@ -15,15 +15,15 @@ export class GeneticVariants implements ComponentInterface {
   @Element() element: HTMLElement;
 
   @State() localeString: any;
-  @State() showId: boolean = true;
+  @State() showId: boolean = false;
   @State() showVariantBrowser: boolean;
-  @State() filteredComponents: Array<any> = []; 
-  @State() showDropdown: boolean = false; 
+  @State() filteredComponents: Array<any> = [];
+  @State() showDropdown: boolean = false;
 
   /**
    * If `true`, the table will include a column to show the ID.
    */
-  @Prop() hideId: boolean = false;
+  @Prop() hideId: boolean = true;
   /**
    * If `true`, the table will include a column to show a link to open the Variant Browser.
    */
@@ -72,12 +72,16 @@ export class GeneticVariants implements ComponentInterface {
       </br>
    * Needs to be an array of JSON objects
    */
-  @Prop() components: any; 
+  @Prop() components: any;
   /**
    * Genetic Observations to be displayed. </br>
    * Needs to be an array of JSON objects
    */
-  @Prop({ reflect: true, mutable: true }) geneticObservations: any = [];
+  @Prop() geneticObservations: any = [];
+  @Watch('geneticObservations')
+  async watchGeneticObservations() {
+    this.parseGeneticObservations();
+  }
   /**
    * Can be one of the following: "snv", "cnv", "sv"
    */
@@ -100,8 +104,7 @@ export class GeneticVariants implements ComponentInterface {
    */
   @Prop() locale: string = "en";
   @Watch('locale')
-  async watchLocale(newValue: string){
-    console.log(newValue)
+  async watchLocale(newValue: string) {
     this.localeString = await getLocaleComponentStrings(this.element, newValue);
   }
 
@@ -297,8 +300,8 @@ export class GeneticVariants implements ComponentInterface {
     }
   ];
 
-  readonly EXPRESSION_BASE: string = "Observation.component.where(code.coding.system='%system' and code.coding.code='%code')"; 
-  readonly EXPRESSION_CODEABLE_CONCEPT: string = this.EXPRESSION_BASE + ".valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)"; 
+  readonly EXPRESSION_BASE: string = "Observation.component.where(code.coding.system='%system' and code.coding.code='%code')";
+  readonly EXPRESSION_CODEABLE_CONCEPT: string = this.EXPRESSION_BASE + ".valueCodeableConcept.coding.iif($this.display.exists(), $this.display, $this.code)";
   readonly EXPRESSION_QUANTITY: string = this.EXPRESSION_BASE + ".valueQuantity.value";
   readonly EXPRESSION_RANGE: string = this.EXPRESSION_BASE + ".valueRange.select(iif($this.low.value.exists(), $this.low.value.toString(), '') + '-' + iif($this.high.value.exists(), $this.high.value.toString(), ''))";
   readonly EXPRESSION_INTEGER: string = this.EXPRESSION_BASE + ".valueInteger";
@@ -331,52 +334,52 @@ export class GeneticVariants implements ComponentInterface {
   getVariantBrowserURL(observation) {
     const baseURL = "https://variant-browser.molit.eu/";
     let url = baseURL;
-    let c = this.EXPRESSION_CODEABLE_CONCEPT;    
+    let c = this.EXPRESSION_CODEABLE_CONCEPT;
     let r = this.EXPRESSION_RANGE;
     let s = this.EXPRESSION_STRING;
-    const chromosome =  this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48001-2"));
+    const chromosome = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48001-2"));
     const ref = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "62374-4"));
-    let start =  this.getComponentValues(observation, r.replace("%system", "http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes").replace("%code", "exact-start-end"));
-    const ref_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69547-8"));
-    const alt_allele =  this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69551-0"));    
+    let start = this.getComponentValues(observation, r.replace("%system", "http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/tbd-codes").replace("%code", "exact-start-end"));
+    const ref_allele = this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69547-8"));
+    const alt_allele = this.getComponentValues(observation, s.replace("%system", "http://loinc.org").replace("%code", "69551-0"));
     const cHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48004-6"));
     const pHGVS = this.getComponentValues(observation, c.replace("%system", "http://loinc.org").replace("%code", "48005-3"));
 
-    switch(this.type){
+    switch (this.type) {
       case "snv":
-        if (chromosome.length && start.length && ref_allele.length && alt_allele.length){
-          if(start[0].endsWith("-")){
-            start = start[0].slice(0,-1);
+        if (chromosome.length && start.length && ref_allele.length && alt_allele.length) {
+          if (start[0].endsWith("-")) {
+            start = start[0].slice(0, -1);
           }
           url = url + "?q=" + chromosome + ":g." + start + ref_allele + ">" + alt_allele;
-          if(ref.length){
+          if (ref.length) {
             url = url + "&ref=" + ref;
           }
         } else if (cHGVS.length && pHGVS.length) {
           url = url + "?q=" + cHGVS + " " + pHGVS;
-          if(ref.length){
+          if (ref.length) {
             url = url + "&ref=" + ref;
           }
 
         }
-      break;
+        break;
       case "cnv":
-        if (chromosome.length && start.length){
+        if (chromosome.length && start.length) {
           url = url + "?q=" + chromosome + ":" + start;
-          if(ref.length){
+          if (ref.length) {
             url = url + "&ref=" + ref;
           }
         }
-      break;  
+        break;
     }
     return url;
   };
 
-  toggleDropdown() { 
+  toggleDropdown() {
     this.showDropdown = !this.showDropdown;
   };
 
-  addExpressionsToComponents(components) { 
+  addExpressionsToComponents(components) {
     if (!components) {
       return [];
     }
@@ -404,27 +407,26 @@ export class GeneticVariants implements ComponentInterface {
 
   initializeComponents() {
     if (this.components) {
-        try {
-          const parsedComponents = JSON.parse(this.components);
-          this.filteredComponents = this.addExpressionsToComponents(parsedComponents);          
-        } catch (e) {
-          console.error("The specified string for components is not valid JSON")
-        }
+      try {
+        const parsedComponents = JSON.parse(this.components);
+        this.filteredComponents = this.addExpressionsToComponents(parsedComponents);
+      } catch (e) {
+        console.error("The specified string for components is not valid JSON")
+      }
     } else {
       this.allComponents = this.addExpressionsToComponents(this.allComponents);
       this.filteredComponents = this.allComponents.filter(c => c && c.variantTypes && c.variantTypes.includes(this.type));
     }
   }
-  
-  parseGeneticObservations(){
-    if(typeof this.geneticObservations === 'string')
-    {
+
+  parseGeneticObservations() {
+    if (typeof this.geneticObservations === 'string') {
       try {
         this.parsedObservations = JSON.parse(this.geneticObservations);
       } catch (e) {
         console.error("The specified string for genetic-observations is not valid JSON")//TODO
       }
-    }else if(typeof this.geneticObservations === 'object'){
+    } else if (typeof this.geneticObservations === 'object') {
       this.parsedObservations = this.geneticObservations;
     } else {
       console.error("genetic-observations are neither a string nor an object")
@@ -437,7 +439,7 @@ export class GeneticVariants implements ComponentInterface {
 
   @Event() changeRelevant: EventEmitter;
   changeRelevantHandler(resourceId, relevant: boolean) {
-    const info = {"id": resourceId, "relevant": !relevant};  // Contains the id of the clicked resource and the boolean value relevant is supposed to be changed to
+    const info = { "id": resourceId, "relevant": !relevant };  // Contains the id of the clicked resource and the boolean value relevant is supposed to be changed to
     this.changeRelevant.emit(info);
   }
 
@@ -448,23 +450,23 @@ export class GeneticVariants implements ComponentInterface {
     this.initializeComponents();
     this.parseGeneticObservations();
     try {
-      this.localeString = await getLocaleComponentStrings(this.element, this.locale);     
-      } catch (e) {
-        console.error(e);
-      }
+      this.localeString = await getLocaleComponentStrings(this.element, this.locale);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   render() {
     return ([
       <div>
-        <div class="genetic-header"> 
-          <h6>{ this.gvTitle }</h6>
-          {this.showColumnHideOptions ? 
-            <button type="button" class="btn btn-link" onClick={() => this.toggleDropdown() }>{this.localeString.columnSelection} &#9662;</button>
-           : null }
+        <div class="genetic-header">
+          <h6>{this.gvTitle}</h6>
+          {this.showColumnHideOptions ?
+            <button type="button" class="btn btn-link" onClick={() => this.toggleDropdown()}>{this.localeString.columnSelection} &#9662;</button>
+            : null}
         </div>
-        <div class="dropdown-wrapper"> 
-          {this.showDropdown ? (          
+        <div class="dropdown-wrapper">
+          {this.showDropdown ? (
             <div class="dropdown">
               <div class="dropdown-top">
                 <div><strong>{this.localeString.columns}</strong></div>
@@ -473,28 +475,28 @@ export class GeneticVariants implements ComponentInterface {
                 </div>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id={this.id()} checked={this.showId} onChange={(ev) => this.showId = this.changed(ev)}/> 
+                <input class="form-check-input" type="checkbox" id={this.id()} checked={this.showId} onChange={(ev) => this.showId = this.changed(ev)} />
                 <label class="form-check-label" htmlFor={this.id()}>Id</label>
               </div>
-              {this.filteredComponents.map(component => 
-                <div class="form-check form-check-inline" key={component.system + '/' + component.value}> 
-                  <input class="form-check-input" type="checkbox" id={this.id() + '/' + component.system + '/' + component.code} checked={component.visible} 
+              {this.filteredComponents.map(component =>
+                <div class="form-check form-check-inline" key={component.system + '/' + component.value}>
+                  <input class="form-check-input" type="checkbox" id={this.id() + '/' + component.system + '/' + component.code} checked={component.visible}
                     onChange={(ev) => (this.filteredComponents.find(comp => comp.code === component.code).visible = this.changed(ev),
-                    this.filteredComponents = [...this.filteredComponents])}/> {/*This first replaces visible and than couses an rerender by updating via spread*/}              
-                  <label class="form-check-label" htmlFor={this.id() + '/' + component.system + '/' + component.code}>{ component.display }</label>
+                      this.filteredComponents = [...this.filteredComponents])} /> {/*This first replaces visible and than couses an rerender by updating via spread*/}
+                  <label class="form-check-label" htmlFor={this.id() + '/' + component.system + '/' + component.code}>{component.display}</label>
                 </div>
               )}
             </div>
-          ): null }
+          ) : null}
         </div>
-        
-        <table class="table table-sm" style={{background: this.tableBackground }}>
+
+        <table class="table table-sm" style={{ background: this.tableBackground }}>
           <thead>
-            <tr style={{background: this.tableHeaderBackground }}>
+            <tr style={{ background: this.tableHeaderBackground }}>
               <th></th> {/* effect? */}
               {this.showId ? <th>{this.localeString.id} </th> : null}
               {this.visibleComponents().map(component =>
-                <th key={component.system + '/' + component.code}>{ component.display }</th>
+                <th key={component.system + '/' + component.code}>{component.display}</th>
               )}
               {this.showVariantBrowser ? <th>{this.localeString.variantBrowser} </th> : null}
             </tr>
@@ -503,39 +505,39 @@ export class GeneticVariants implements ComponentInterface {
             {this.parsedObservations.map(resource =>
               <tr key={resource.id}>
                 <td>
-                  { resource.relevant===true ?
-                    <a innerHTML={starFilled} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)} class="tip"> <span>{this.localeString.removeRelevantVariant}</span></a> 
-                  : <a innerHTML={starOutline} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)} class="tip"> <span>{this.localeString.addRelevantVariant}</span></a>
+                  {resource.relevant === true ?
+                    <a innerHTML={starFilled} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)} class="tip"> <span>{this.localeString.removeRelevantVariant}</span></a>
+                    : <a innerHTML={starOutline} onClick={() => this.changeRelevantHandler(resource.id, resource.relevant)} class="tip"> <span>{this.localeString.addRelevantVariant}</span></a>
                   }
                 </td>
-                {this.showId ? <td>{ resource.id } </td> : null}
+                {this.showId ? <td>{resource.id} </td> : null}
                 {this.visibleComponents().map(component =>
                   <td key={component.system + '/' + component.code}>
                     {this.getComponentValues(resource, component.expression).map(value =>
-                      <span key={value}>                          
-                        {(component.link && component.link.url && component.link.attribute ) ? 
+                      <span key={value}>
+                        {(component.link && component.link.url && component.link.attribute) ?
                           (<span>
-                          <a href={this.createLink(component, value)} target="_blank">{ value }</a> 
+                            <a href={this.createLink(component, value)} target="_blank">{value}</a>
                           &#32;
                           </span>)
-                        : <span>{ value }&#32;</span>}                    
+                          : <span>{value}&#32;</span>}
                       </span>
                     )}
                   </td>
                 )}
-                {this.showVariantBrowser ? 
+                {this.showVariantBrowser ?
                   <td>
                     <span>
-                      <a href={this.getVariantBrowserURL(resource)} title={this.localeString.openVariantBrowser} target="_blank"> {this.localeString.variantBrowserShort} </a> 
+                      <a href={this.getVariantBrowserURL(resource)} title={this.localeString.openVariantBrowser} target="_blank"> {this.localeString.variantBrowserShort} </a>
                       &#32;
                     </span>
                   </td>
-                : null}                
+                  : null}
               </tr>
             )}
           </tbody>
-        </table>    
+        </table>
       </div>
-    ]);        
+    ]);
   }
 }
