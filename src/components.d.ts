@@ -70,6 +70,10 @@ export namespace Components {
          */
         "idGenomicsReport": string;
         /**
+          * Id of the list of important variants
+         */
+        "idImportantVariantsList": string;
+        /**
           * Language property of the component. </br> Currently suported: [de, en]
          */
         "locale": string;
@@ -182,6 +186,10 @@ declare namespace LocalJSX {
           * ID of the to be requested resource
          */
         "idGenomicsReport": string;
+        /**
+          * Id of the list of important variants
+         */
+        "idImportantVariantsList"?: string;
         /**
           * Language property of the component. </br> Currently suported: [de, en]
          */

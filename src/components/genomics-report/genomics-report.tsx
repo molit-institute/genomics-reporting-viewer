@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, Prop, h, Event, EventEmitter, Watch, State, Element, Listen } from '@stencil/core';
-import { fetchResources } from "@molit/fhir-api";
+import { fetchResources, fetchResource, updateResource } from "@molit/fhir-api";
 import { fhirpath } from "../../util/fhirpath/fhirpath.min.js";
 import { getLocaleComponentStrings } from "../../util/locale";
 import { keyboard_arrow_down, keyboard_arrow_right } from "../../util/svg-icons";
@@ -34,6 +34,10 @@ export class GenomicsReport implements ComponentInterface {
   validateIdGenomicsReport() {
     if (this.idGenomicsReport == null) { throw new Error('id-genomics-report: required'); }
   }
+  /**
+   * Id of the list of important variants
+   */
+  @Prop() idImportantVariantsList: string;
   /**
    * Authentication token that will be added to the Authorization Header within all request in the fhir-server. </br>
    * ```Authorization: Bearer <token>```
@@ -135,48 +139,6 @@ export class GenomicsReport implements ComponentInterface {
     return fhirpath.evaluate(this.bundle, this.FHIRPATH_DIAGNOSTIC_REPORT)[0];
   };
 
-  getImportantVariants() {
-    return {
-      "resourceType": "List",
-      "id": "importantVariants",
-      "extension": [
-        {
-          "url": "http://molit.eu/fhir/vitu/StructureDefinition/DiagnosticReport",
-          "valueReference": "DiagnosticReport/5f7ee91b-6aa1-4f5c-a4c1-013a36040803"
-        }
-      ],
-      "status": "current",
-      "mode": "working",
-      "code": {
-        "coding": [
-          {
-            "system": "http://ncit.nci.nih.gov",
-            "code": "C115916",
-            "display": "Important"
-          }
-        ]
-      },
-      "subject": {
-        "reference": "Patient/2f4b2548-71d6-48dd-81eb-067538ace523"
-      },
-      "encounter": {
-        "reference": "Encounter/b275c583-b280-46b8-a18c-078e74d87399"
-      },
-      "entry": [
-        {
-          "item": {
-            "reference": "Observation/354"
-          }
-        },
-        {
-          "item": {
-            "reference": "Observation/356"
-          }
-        }
-      ]
-    }
-  }
-
   getPresentedForms() {
     if (!this.diagnosticReport || !this.diagnosticReport.presentedForm) {
       return [];
@@ -239,8 +201,14 @@ export class GenomicsReport implements ComponentInterface {
   /* methods */
 
   addRelevantToObservations(observations: any[]) {
+    if (this.importantVariants == null) {
+      return observations;
+    }
     for (let i = 0; i < observations.length; i++) {
       const idString = "Observation/" + observations[i].id;
+      if (this.importantVariants.entry == null) {
+        this.importantVariants.entry = [];
+      }
       if (this.importantVariants.entry.some(e => e.item.reference === idString)) {
         observations[i].relevant = true;
       } else {
@@ -251,7 +219,10 @@ export class GenomicsReport implements ComponentInterface {
   }
 
   @Listen('changeRelevant')
-  handleChangeRelevant(event: CustomEvent) { // Update importantVariants in Server
+  async handleChangeRelevant(event: CustomEvent) { // Update importantVariants on Server
+    if (this.importantVariants == null) {
+      return;
+    }
     const idString = "Observation/" + event.detail.id;
     if (event.detail.relevant === true) { // Adds new entry to importantVariants.entry
       const entry = this.importantVariants.entry.find(e => e.item.reference === idString);
@@ -260,8 +231,8 @@ export class GenomicsReport implements ComponentInterface {
       }
     } else { // Removes entry from importantVariants.entry
       this.importantVariants.entry = this.importantVariants.entry.filter(e => e.item.reference != idString);
-
     }
+    await updateResource(this.fhirBaseUrl, this.importantVariants, this.token);
     this.changedRelevant = !this.changedRelevant;
   }
 
@@ -270,6 +241,10 @@ export class GenomicsReport implements ComponentInterface {
     try {
       const response = await fetchResources(this.fhirBaseUrl, "DiagnosticReport", this.params, this.token);
       this.bundle = response.data;
+      if (this.idImportantVariantsList != null && this.idImportantVariantsList != "") {
+        const responseImportantVariants = await fetchResource(this.fhirBaseUrl, "List", this.idImportantVariantsList, {}, this.token);
+        this.importantVariants = responseImportantVariants.data;
+      }
     } catch (e) {
       console.error(e);
       this.errorOccurred.emit(e);
@@ -308,7 +283,6 @@ export class GenomicsReport implements ComponentInterface {
     await this.fetchResources();
     this.diagnosticReport = this.getDiagnosticReport();
     this.presentedForms = this.getPresentedForms();
-    this.importantVariants = this.getImportantVariants();
   }
 
   componentWillRender() {
@@ -428,10 +402,9 @@ export class GenomicsReport implements ComponentInterface {
           }
           <h4>
             {this.enableRelevantVariants ?
-              <a innerHTML={keyboard_arrow_down} onClick={() => this.enableRelevantV()}> </a>
-              : <a innerHTML={keyboard_arrow_right} onClick={() => this.enableRelevantV()}> </a>
+              <a innerHTML={keyboard_arrow_down + "" + this.localeString.relevantVariants} onClick={() => this.enableRelevantV()}></a>
+              : <a innerHTML={keyboard_arrow_right + "" + this.localeString.relevantVariants} onClick={() => this.enableRelevantV()}></a>
             }
-            {this.localeString.relevantVariants}
           </h4>
           {this.enableRelevantVariants ?
             <div>
@@ -451,10 +424,9 @@ export class GenomicsReport implements ComponentInterface {
             : null}
           <h4>
             {this.enableAllVariants ?
-              <a innerHTML={keyboard_arrow_down} onClick={() => this.enableAllV()}> </a>
-              : <a innerHTML={keyboard_arrow_right} onClick={() => this.enableAllV()}> </a>
+              <a innerHTML={keyboard_arrow_down + "" + this.localeString.allVariants} onClick={() => this.enableAllV()}></a>
+              : <a innerHTML={keyboard_arrow_right + "" + this.localeString.allVariants} onClick={() => this.enableAllV()}></a>
             }
-            {this.localeString.allVariants}
           </h4>
           {this.enableAllVariants ?
             <div>

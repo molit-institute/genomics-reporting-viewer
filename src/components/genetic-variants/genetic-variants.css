@@ -44,6 +44,9 @@
   justify-content: space-between;
   align-items: center;
 }
+a {
+  cursor: pointer;
+}
 a.tip {
   text-decoration: none
 }
