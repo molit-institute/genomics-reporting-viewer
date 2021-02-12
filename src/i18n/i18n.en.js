@@ -1,4 +1,5 @@
 export default {
+    "addRelevantVariant": "Add to Relevant Variants",
     "allVariants": "All Variants",
     "chromosomalInstability": "Chromosomal Instability",
     "columnSelection": "Column selection",
@@ -13,6 +14,8 @@ export default {
     "otherObservations": "Other Observations",
     "percentageTumorTissue": "Percentage Tumor Tissue",
     "quality": "Quality",
+    "relevantVariants": "Relevant Variants",
+    "removeRelevantVariant": "Remove from Relevant Variants",
     "report": "Genetic Report",
     "status": "Status",
     "tmb": "TMB",    

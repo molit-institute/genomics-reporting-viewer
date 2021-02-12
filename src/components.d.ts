@@ -50,7 +50,11 @@ export namespace Components {
     }
     interface GenomicsReport {
         /**
-          * TODO Funtionalty to be added
+          * If `true`, the component will show All Variants unfolded when first opened.
+         */
+        "enableAllVariants": boolean;
+        /**
+          * If `true`, the component will show Relevant Variants unfolded when first opened.
          */
         "enableRelevantVariants": boolean;
         /**
@@ -65,6 +69,10 @@ export namespace Components {
           * ID of the to be requested resource
          */
         "idGenomicsReport": string;
+        /**
+          * Id of the list of important variants
+         */
+        "idImportantVariantsList": string;
         /**
           * Language property of the component. </br> Currently suported: [de, en]
          */
@@ -82,11 +90,11 @@ export namespace Components {
          */
         "tableHeaderBackground": string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantBackground": string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the header background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantHeaderBackground": string;
         /**
@@ -139,6 +147,7 @@ declare namespace LocalJSX {
           * Language property of the component. </br> Currently suported: [de, en]
          */
         "locale"?: string;
+        "onChangeRelevant"?: (event: CustomEvent<any>) => void;
         /**
           * If `true`, the component will show a button to select column options.
          */
@@ -158,7 +167,11 @@ declare namespace LocalJSX {
     }
     interface GenomicsReport {
         /**
-          * TODO Funtionalty to be added
+          * If `true`, the component will show All Variants unfolded when first opened.
+         */
+        "enableAllVariants"?: boolean;
+        /**
+          * If `true`, the component will show Relevant Variants unfolded when first opened.
          */
         "enableRelevantVariants"?: boolean;
         /**
@@ -173,6 +186,10 @@ declare namespace LocalJSX {
           * ID of the to be requested resource
          */
         "idGenomicsReport": string;
+        /**
+          * Id of the list of important variants
+         */
+        "idImportantVariantsList"?: string;
         /**
           * Language property of the component. </br> Currently suported: [de, en]
          */
@@ -191,11 +208,11 @@ declare namespace LocalJSX {
          */
         "tableHeaderBackground"?: string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantBackground"?: string;
         /**
-          * TODO Funtionalty to be added
+          * Defines colour of the header background of *genetic-variants*-table containing relevant variants
          */
         "tableRelevantHeaderBackground"?: string;
         /**

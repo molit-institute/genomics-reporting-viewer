@@ -1,4 +1,10 @@
 # Genomics Reporting Viewer
+![build](https://github.com/molit-institute/genomics-reporting-viewer/workflows/Build/badge.svg)
+![publish](https://github.com/molit-institute/genomics-reporting-viewer/workflows/Publish/badge.svg)
+![npm version](https://img.shields.io/npm/v/@molit/genomics-reporting-viewer.svg)
+![npm license](https://img.shields.io/npm/l/@molit/genomics-reporting-viewer.svg)
+
+
 Components for displaying FHIR genomic reports complying to the [FHIR Genomics Reporting Implementation Guide](http://hl7.org/fhir/uv/genomics-reporting/).
 
 ## Install

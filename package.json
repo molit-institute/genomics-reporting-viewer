@@ -31,7 +31,7 @@
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/core": "^1.12.2",
+    "@stencil/core": "^1.17.4",
     "@types/jest": "24.9.1",
     "@types/puppeteer": "2.0.1",
     "jest": "24.9.0",
@@ -40,8 +40,8 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@molit/fhir-api": "^1.0.22",
-    "fhirpath": "^2.3.0",
-    "lodash": "^4.17.15"
+    "@molit/fhir-api": "^1.0.28",
+    "fhirpath": "^2.7.2",
+    "lodash": "^4.17.20"
   }
 }
