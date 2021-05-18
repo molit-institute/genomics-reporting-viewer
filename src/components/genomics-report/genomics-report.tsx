@@ -148,7 +148,7 @@ export class GenomicsReport implements ComponentInterface {
   };
 
   chromosomalInstability() {
-    return fhirpath.evaluate(this.bundle, this.FHIRPATH_CHROMOSOMAL_INSTABILITY)[0];
+    return fhirpath.evaluate(this.bundle, this.FHIRPATH_CHROMOSOMAL_INSTABILITY).join(",");
   };
 
   getCnvs() {
@@ -325,7 +325,7 @@ export class GenomicsReport implements ComponentInterface {
               <h5>{this.localeString.otherObservations}</h5>
               <div class="form-row">
                 <label class="col-md-3 col-form-label">{this.localeString.chromosomalInstability}</label>
-                <label class="col-md-9 col-form-label">{this.chromosomalInstability().toString()}</label>
+                <label class="col-md-9 col-form-label">{this.chromosomalInstability()}</label>
               </div>
               <div class="form-row">
                 <label class="col-md-3 col-form-label">{this.localeString.germlinePathogenicity}</label>
@@ -374,7 +374,7 @@ export class GenomicsReport implements ComponentInterface {
                   </tr>
                   <tr>
                     <th>{this.localeString.chromosomalInstability}</th>
-                    <td>{this.chromosomalInstability().toString()}</td>
+                    <td>{this.chromosomalInstability()}</td>
                   </tr>
                   <tr>
                     <th>{this.localeString.germlinePathogenicity}</th>
