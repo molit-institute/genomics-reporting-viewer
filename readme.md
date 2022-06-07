@@ -60,6 +60,14 @@ Need more information? Check out the [StencilJS Framework Integration Guide](htt
 | [genomics-report](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genomics-report)   | Displays the given FHIR genomic report. </br> Depends on [genetic-variants](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genetic-variants).   | `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>`  | [:link:](https://docs.molit.eu/genomics-reporting-viewer/) |
 | [genetic-variants](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genetic-variants) | Displays the given genetic variant as a table. </br> Used by [genomics-report](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genomics-report). | `<genetic-variants  genetic-observations='[...]' type="snv" gv-title="SNVs"></genetic-variants> ` | [:link:](https://docs.molit.eu/genomics-reporting-viewer/genetic-variants-example) |
 
+## Demo 
+
+Example Projects showcasing the usage of @molit/genomics-reporting-viewer
+
+[HTML](https://github.com/molit-institute/genomics-reporting-viewer-example-html) 
+
+[Vue.js](https://github.com/molit-institute/genomics-reporting-viewer-example-vue)
+
 ----------------------------------------------
 
 <footer> <i>Built with love! by MOLIT Institut gGmbH ❤❤</i> </footer>
