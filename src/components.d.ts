@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface GeneticVariants {
         /**
-          * The following components are included by default: <ul>   <li>Gene</li>   <li>Chromosome</li>   <li>Copy Number</li>   <li>Reference</li>   <li>Genomic source class</li>   <li>DNA change type</li>   <li>c.HGVS</li>   <li>p.HGVS</li>   <li>Transcript ID</li>   <li>Sample Allelic Frequency</li>   <li>Allelic read depth</li>   <li>Associated phenotype</li>   <li>Clinical significance</li>   <li>exact-start-end</li>   <li>Ref allele</li>   <li>Alt allele</li>   <li>Left breakpoint position</li>   <li>Right breakpoint position</li>   <li>CNV Size</li>   <li>Exons</li> </ul>  **Example Struktur of a component:** </br> ``` {   system: "http://loinc.org",   code: "62374-4",   display: "Reference",   expression: null,   visible: false,   valueType: "CodeableConcept",   variantTypes: ["snv", "cnv", "sv"]   }   ```   </br> Needs to be an array of JSON objects
+          * The following components are included by default: <ul>  <li>Gene</li>  <li>Chromosome</li>  <li>Copy Number</li>  <li>Reference</li>  <li>Genomic source class</li>  <li>DNA change type</li>  <li>c.HGVS</li>  <li>p.HGVS</li>  <li>Transcript ID</li>  <li>Sample Allelic Frequency</li>  <li>Allelic read depth</li>  <li>Associated phenotype</li>  <li>Clinical significance</li>  <li>exact-start-end</li>  <li>Ref allele</li>  <li>Alt allele</li>  <li>Left breakpoint position</li>  <li>Right breakpoint position</li>  <li>CNV Size</li>  <li>Exons</li> </ul>  **Example Struktur of a component:** </br> ``` {  system: "http://loinc.org",  code: "62374-4",  display: "Reference",  expression: null,  visible: false,  valueType: "CodeableConcept",  variantTypes: ["snv", "cnv", "sv"]  }  ```  </br> Needs to be an array of JSON objects
          */
         "components": any;
         /**
@@ -103,6 +103,14 @@ export namespace Components {
         "token": string;
     }
 }
+export interface GeneticVariantsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLGeneticVariantsElement;
+}
+export interface GenomicsReportCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLGenomicsReportElement;
+}
 declare global {
     interface HTMLGeneticVariantsElement extends Components.GeneticVariants, HTMLStencilElement {
     }
@@ -124,7 +132,7 @@ declare global {
 declare namespace LocalJSX {
     interface GeneticVariants {
         /**
-          * The following components are included by default: <ul>   <li>Gene</li>   <li>Chromosome</li>   <li>Copy Number</li>   <li>Reference</li>   <li>Genomic source class</li>   <li>DNA change type</li>   <li>c.HGVS</li>   <li>p.HGVS</li>   <li>Transcript ID</li>   <li>Sample Allelic Frequency</li>   <li>Allelic read depth</li>   <li>Associated phenotype</li>   <li>Clinical significance</li>   <li>exact-start-end</li>   <li>Ref allele</li>   <li>Alt allele</li>   <li>Left breakpoint position</li>   <li>Right breakpoint position</li>   <li>CNV Size</li>   <li>Exons</li> </ul>  **Example Struktur of a component:** </br> ``` {   system: "http://loinc.org",   code: "62374-4",   display: "Reference",   expression: null,   visible: false,   valueType: "CodeableConcept",   variantTypes: ["snv", "cnv", "sv"]   }   ```   </br> Needs to be an array of JSON objects
+          * The following components are included by default: <ul>  <li>Gene</li>  <li>Chromosome</li>  <li>Copy Number</li>  <li>Reference</li>  <li>Genomic source class</li>  <li>DNA change type</li>  <li>c.HGVS</li>  <li>p.HGVS</li>  <li>Transcript ID</li>  <li>Sample Allelic Frequency</li>  <li>Allelic read depth</li>  <li>Associated phenotype</li>  <li>Clinical significance</li>  <li>exact-start-end</li>  <li>Ref allele</li>  <li>Alt allele</li>  <li>Left breakpoint position</li>  <li>Right breakpoint position</li>  <li>CNV Size</li>  <li>Exons</li> </ul>  **Example Struktur of a component:** </br> ``` {  system: "http://loinc.org",  code: "62374-4",  display: "Reference",  expression: null,  visible: false,  valueType: "CodeableConcept",  variantTypes: ["snv", "cnv", "sv"]  }  ```  </br> Needs to be an array of JSON objects
          */
         "components"?: any;
         /**
@@ -147,7 +155,7 @@ declare namespace LocalJSX {
           * Language property of the component. </br> Currently suported: [de, en]
          */
         "locale"?: string;
-        "onChangeRelevant"?: (event: CustomEvent<any>) => void;
+        "onChangeRelevant"?: (event: GeneticVariantsCustomEvent<any>) => void;
         /**
           * If `true`, the component will show a button to select column options.
          */
@@ -198,7 +206,7 @@ declare namespace LocalJSX {
           * If `true`, the component will show meta informations as a table.
          */
         "metaAsTable"?: boolean;
-        "onErrorOccurred"?: (event: CustomEvent<any>) => void;
+        "onErrorOccurred"?: (event: GenomicsReportCustomEvent<any>) => void;
         /**
           * Defines colour of the background of *genetic-variants*-table
          */

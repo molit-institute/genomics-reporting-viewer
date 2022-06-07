@@ -10,8 +10,8 @@
     "stencil",
     "component"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
   "es2017": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
@@ -26,22 +26,20 @@
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
-    "test-e2e": "stencil test --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/core": "^1.17.4",
-    "@types/jest": "24.9.1",
-    "@types/puppeteer": "2.0.1",
-    "jest": "24.9.0",
-    "jest-cli": "24.9.0",
-    "puppeteer": "2.1.1"
+    "@stencil/core": "^2.16.1",
+    "@types/jest": "27.5.1",
+    "jest": "27.5.1",
+    "jest-cli": "27.5.1",
+    "puppeteer": "^14.2.1"
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@molit/fhir-api": "^1.0.29",
-    "fhirpath": "^2.9.1",
+    "@molit/fhir-api": "^1.0.41",
+    "fhirpath": "^2.14.3",
     "lodash": "^4.17.21"
   }
 }
