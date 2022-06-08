@@ -38,7 +38,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@molit/fhir-api": "^1.0.41",
+    "@molit/fhir-api": "^1.0.42",
     "fhirpath": "^2.14.3",
     "lodash": "^4.17.21"
   }

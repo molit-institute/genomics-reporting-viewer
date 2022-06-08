@@ -43,12 +43,12 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 #### Script tag
 
-- Add the script tag `<script src="https://unpkg.com/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your `index.html`
+- Add the script tag `<script src="https://unpkg.com/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.esm.js"></script>` to the head of your `index.html`
 - Then you can use the element anywhere in your template, JSX, html etc
 
 #### Node Modules
 - Run `npm install @molit/genomics-reporting-viewer --save`
-- Add the script tag`<script src="/node_modules/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your `index.html`
+- Add the script tag`<script src="/node_modules/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.esm.js"></script>` to the head of your `index.html`
 - Then you can use the element anywhere in your template, JSX, html etc
 
 Need more information? Check out the [StencilJS Framework Integration Guide](https://stenciljs.com/docs/overview).
