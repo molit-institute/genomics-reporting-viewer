@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "@stencil/core": "^2.16.1",
-    "@types/jest": "27.5.1",
-    "jest": "27.5.1",
-    "jest-cli": "27.5.1",
+    "@types/jest": "^27.0.3",
+    "jest": "^27.0.3",
+    "jest-cli": "^27.4.5",
     "puppeteer": "^14.2.1"
   },
   "license": "Apache-2.0",
