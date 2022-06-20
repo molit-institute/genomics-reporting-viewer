@@ -9,13 +9,16 @@ export const config: Config = {
       esmLoaderPath: '../loader'
     },
     {
+      type: 'dist-custom-elements',
+    },
+    {
       type: 'docs-readme',
       footer: '*Built with love! by MOLIT Institut gGmbH ❤❤*',
     },
     {
       type: 'www',
       serviceWorker: null // disable service workers
-    }
+    },
   ],
   // testing: {
   //   transformIgnorePatterns: [

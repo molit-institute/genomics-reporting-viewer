@@ -13,13 +13,13 @@
     <script nomodule="" src="https://unpkg.com/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>    
   </head>
   <body>
-	<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>
+	<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="3972" ></genomics-report>
   </body>
 </html>
 
 ### Code
 ``` html
-	<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>
+	<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="3972" ></genomics-report>
 ```
 
 
