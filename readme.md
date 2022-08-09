@@ -43,12 +43,12 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 #### Script tag
 
-- Add the script tag `<script src="https://unpkg.com/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your `index.html`
+- Add the script tag `<script type="module" src="https://unpkg.com/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer/genomics-reporting-viewer.esm.js"></script>` to the head of your `index.html`
 - Then you can use the element anywhere in your template, JSX, html etc
 
 #### Node Modules
 - Run `npm install @molit/genomics-reporting-viewer --save`
-- Add the script tag`<script src="/node_modules/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.js"></script>` to the head of your `index.html`
+- Add the script tag`<script type='module' src="/node_modules/@molit/genomics-reporting-viewer/dist/genomics-reporting-viewer.esm.js"></script>` to the head of your `index.html`
 - Then you can use the element anywhere in your template, JSX, html etc
 
 Need more information? Check out the [StencilJS Framework Integration Guide](https://stenciljs.com/docs/overview).
@@ -57,7 +57,7 @@ Need more information? Check out the [StencilJS Framework Integration Guide](htt
 
 | Name                                                                                                                           | Description                                                                                                     | Example | Example Component |
 | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------- | ----------------- |
-| [genomics-report](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genomics-report)   | Displays the given FHIR genomic report. </br> Depends on [genetic-variants](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genetic-variants).   | `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="364" ></genomics-report>`  | [:link:](https://docs.molit.eu/genomics-reporting-viewer/) |
+| [genomics-report](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genomics-report)   | Displays the given FHIR genomic report. </br> Depends on [genetic-variants](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genetic-variants).   | `<genomics-report fhir-base-url="https://fhir.molit.eu/fhir" id-genomics-report="3972" ></genomics-report>`  | [:link:](https://docs.molit.eu/genomics-reporting-viewer/) |
 | [genetic-variants](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genetic-variants) | Displays the given genetic variant as a table. </br> Used by [genomics-report](https://github.com/molit-institute/genomics-reporting-viewer/tree/master/src/components/genomics-report). | `<genetic-variants  genetic-observations='[...]' type="snv" gv-title="SNVs"></genetic-variants> ` | [:link:](https://docs.molit.eu/genomics-reporting-viewer/genetic-variants-example) |
 
 ## Demo 

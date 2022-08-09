@@ -29,7 +29,7 @@ export class GeneticVariants implements ComponentInterface {
    */
   @Prop() hideLinkVariantBrowser: boolean = false;
   /**
-   * If `true`, the component will show a button to select column options. 
+   * If `true`, the component will show a button to select column options.
    */
   @Prop() showColumnHideOptions: boolean = true;
   /**
@@ -56,7 +56,7 @@ export class GeneticVariants implements ComponentInterface {
    *  <li>CNV Size</li>
    *  <li>Exons</li>
    * </ul>
-   * 
+   *
    * **Example Struktur of a component:** </br>
    * ```
    * {
@@ -220,16 +220,16 @@ export class GeneticVariants implements ComponentInterface {
     {
       system: "http://loinc.org",
       code: "81259-4",
-      display: "Associated phenotype",
+      display: "Effect",
       expression: null,
-      visible: false,
+      visible: true,
       valueType: "CodeableConcept",
       variantTypes: ["snv", "cnv", "sv"]
     },
     {
       system: "http://loinc.org",
       code: "53037-8",
-      display: "Clinical significance",
+      display: "Driver-Mutation",
       expression: null,
       visible: true,
       valueType: "CodeableConcept",

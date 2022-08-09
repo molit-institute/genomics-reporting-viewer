@@ -1,6 +1,6 @@
 {
   "name": "@molit/genomics-reporting-viewer",
-  "version": "1.0.15",
+  "version": "1.0.19",
   "description": "Components for displaying FHIR genomic reports complying to the FHIR Genomics Reporting Implementation Guide http://hl7.org/fhir/uv/genomics-reporting/.",
   "keywords": [
     "genomics",
@@ -17,7 +17,7 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/genomics-reporting-viewer/genomics-reporting-viewer.js",
+  "unpkg": "dist/genomics-reporting-viewer/genomics-reporting-viewer.esm.js",
   "files": [
     "dist/",
     "loader/"
