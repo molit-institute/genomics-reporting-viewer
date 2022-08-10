@@ -271,6 +271,22 @@ export class GenomicsReport implements ComponentInterface {
     this.enableAllVariants = !this.enableAllVariants;
   }
 
+  exportBundleJson() {
+    if (this.bundle != null) {
+      const exportArray = [];
+      exportArray.push(this.bundle);
+      if (this.importantVariants != null) {
+        exportArray.push(this.importantVariants);
+      }
+      const linkSource = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(exportArray))}`;
+      const downloadLink = document.createElement("a");
+      const fileName = "bundle.json";
+      downloadLink.href = linkSource;
+      downloadLink.download = fileName;
+      downloadLink.click();
+    }
+  }
+
   /* Lifecycle Methods */
   async componentWillLoad() {
     try {
@@ -320,6 +336,14 @@ export class GenomicsReport implements ComponentInterface {
                       {index + 1}
                     </a>
                   )}
+                </label>
+              </div>
+              <div class="form-row">
+                <label class="col-md-3 col-form-label">{this.localeString.export}</label>
+                <label class="col-md-9 col-form-label">
+                  <a href="#" onClick={() => this.exportBundleJson()}>
+                    .json
+                  </a>
                 </label>
               </div>
               <h5>{this.localeString.otherObservations}</h5>

@@ -20,5 +20,6 @@ export default {
     "status": "Status",
     "tmb": "TMB",    
     "variantBrowser": "Variant Browser",
-    "variantBrowserShort": "VB"
+    "variantBrowserShort": "VB",
+    "export": "Export"
 }
